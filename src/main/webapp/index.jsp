@@ -4,6 +4,8 @@
     <title>Hi</title>
   </head>
   <body>
-  Hi
+  Hi, ${nickname}
+  <br>
+  <a href="logout.do">Log-out</a>
   </body>
 </html>
