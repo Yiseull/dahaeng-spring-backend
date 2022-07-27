@@ -1,41 +1,28 @@
-import org.springframework.stereotype.Repository;
+package com.dahaeng;
 
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Repository
 public class UserDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    public void insertBoard(BoardVO vo) {
-        System.out.println("===> JPA로 insertBoard() 기능 처리");
+    @Transactional(rollbackFor = Exception.class)
+    public void insertUser(UserVO vo) {
         entityManager.persist(vo);
     }
 
-    public void updateBoard(BoardVO vo) {
-        System.out.println("===> JPA로 updateBoard() 기능 처리");
-        entityManager.merge(vo);
+    public UserVO getUser(UserVO vo) {
+        return (UserVO) entityManager.find((UserVO.class), vo.getEmail());
     }
 
-    public void deleteBoard(BoardVO vo) {
-        System.out.println("===> JPA로 deleteBoard() 기능 처리");
-        entityManager.remove(entityManager.find(BoardVO.class, vo.getSeq()));
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteUser(UserVO vo) {
+        entityManager.remove(vo);
     }
 
-    public BoardVO getBoard(BoardVO vo) {
-        System.out.println("===> JPA로 getBoard() 기능 처리");
-        return (BoardVO) entityManager.find((BoardVO.class), vo.getSeq());
-    }
-
-    public List<BoardVO> getBoardList(BoardVO vo) {
-        System.out.println("===> JPA로 getBoardList() 기능 처리");
-        String condition = "";
-        if(vo.getSearchCondition().equals("TITLE")) {
-            condition = "title";
-        } else if(vo.getSearchCondition().equals("CONTENT")) {
-            condition = "content";
-        }
-        String jpql = "select b from BoardVO b where b." + condition + " like \'%" + vo.getSearchKeyword() +"%\' order by b.seq desc";
-        return entityManager.createQuery(jpql).getResultList();
-    }
 }

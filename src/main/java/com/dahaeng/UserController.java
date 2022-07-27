@@ -1,29 +1,52 @@
+package com.dahaeng;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
 @Controller
+@SessionAttributes("user")
 public class UserController {
+    @Autowired
+    private UserServiceImpl userService;
 
-    @RequestMapping(value = "/login.do", method = RequestMethod.GET)
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginView(@ModelAttribute("user") UserVO vo) {
         System.out.println("로그인 화면으로 이동");
-        vo.setId("test");
-        vo.setPassword("test123");
         return "login.jsp";
     }
 
-    @RequestMapping(value = "/login.do", method = RequestMethod.POST)
-    public String login(UserVO vo, UserDAO userDAO, HttpSession session) {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public String login(UserVO vo, Model model) {
         System.out.println("로그인 인증 처리...");
-        UserVO user = userDAO.getUser(vo);
+        UserVO user = userService.getUser(vo);
         if (user != null) {
-            session.setAttribute("userName", user.getName());
-            return "getBoardList.do";
+            model.addAttribute(("user"), userService.getUser(vo));
+            return "index.jsp";
         }
         else return "login.jsp";
     }
+
+    @RequestMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "login.jsp";
+    }
+
+    @PostMapping("/join")
+    public String join(UserVO vo) {
+        userService.insertUser(vo);
+        return "login.jsp";
+    }
+
+    @RequestMapping("/withdrawal")
+    public String withdrawal(UserVO vo) {
+        UserVO user = userService.getUser(vo);
+        userService.deleteUser(user);
+        return "join.jsp";
+    }
+
 }
