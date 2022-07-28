@@ -14,25 +14,26 @@ public class UserController {
     private UserServiceImpl userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginView(@ModelAttribute("user") UserVO vo) {
-        System.out.println("로그인 화면으로 이동");
+    public String loginView() {
         return "login.jsp";
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public String login(UserVO vo, Model model) {
-        System.out.println("로그인 인증 처리...");
-        UserVO user = userService.getUser(vo);
+        UserVO user = userService.findByEmailAndPassword(vo);
         if (user != null) {
-            model.addAttribute(("user"), userService.getUser(vo));
+            model.addAttribute(("user"), user);
             return "index.jsp";
         }
-        else return "login.jsp";
+        return "login.jsp";
     }
 
     @RequestMapping("/logout")
-    public String logout(HttpSession session) {
+    public String logout(HttpSession session, @ModelAttribute("user") UserVO vo) {
         session.invalidate();
+        vo.setEmail("");
+        vo.setPassword("");
+        vo.setNickname("");
         return "login.jsp";
     }
 
@@ -43,8 +44,8 @@ public class UserController {
     }
 
     @RequestMapping("/withdrawal")
-    public String withdrawal(UserVO vo) {
-        UserVO user = userService.getUser(vo);
+    public String withdrawal(@ModelAttribute("user") UserVO vo) {
+        UserVO user = userService.findByEmail(vo);
         userService.deleteUser(user);
         return "join.jsp";
     }
