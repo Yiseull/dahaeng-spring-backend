@@ -1,4 +1,4 @@
-package com.dahaeng;
+package com.dahaeng.biz;
 
 import lombok.Builder;
 import lombok.Data;

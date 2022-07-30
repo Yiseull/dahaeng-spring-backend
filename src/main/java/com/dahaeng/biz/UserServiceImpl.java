@@ -1,4 +1,4 @@
-package com.dahaeng;
+package com.dahaeng.biz;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +14,12 @@ public class UserServiceImpl implements UserService {
         userDAO.insertUser(vo);
     }
 
+    @Transactional(readOnly = true)
     public UserVO findByEmail(UserVO vo) {
         return userDAO.findByEmail(vo);
     }
 
+    @Transactional(readOnly = true)
     public UserVO findByEmailAndPassword(UserVO vo) {
         return userDAO.findByEmailAndPassword(vo);
     }

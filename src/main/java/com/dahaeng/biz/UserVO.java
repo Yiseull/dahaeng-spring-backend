@@ -1,4 +1,4 @@
-package com.dahaeng;
+package com.dahaeng.biz;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

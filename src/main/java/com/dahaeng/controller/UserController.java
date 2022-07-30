@@ -1,5 +1,7 @@
-package com.dahaeng;
+package com.dahaeng.controller;
 
+import com.dahaeng.biz.UserService;
+import com.dahaeng.biz.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,7 +13,7 @@ import javax.servlet.http.HttpSession;
 @SessionAttributes("user")
 public class UserController {
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String loginView() {
@@ -45,8 +47,7 @@ public class UserController {
 
     @RequestMapping("/withdrawal")
     public String withdrawal(@ModelAttribute("user") UserVO vo) {
-        UserVO user = userService.findByEmail(vo);
-        userService.deleteUser(user);
+        userService.deleteUser(vo);
         return "join.jsp";
     }
 

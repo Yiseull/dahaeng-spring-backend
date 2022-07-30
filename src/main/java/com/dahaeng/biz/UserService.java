@@ -1,6 +1,6 @@
-package com.dahaeng;
+package com.dahaeng.biz;
 
-interface UserService {
+public interface UserService {
     public void insertUser(UserVO vo);
 
     public UserVO findByEmail(UserVO vo);

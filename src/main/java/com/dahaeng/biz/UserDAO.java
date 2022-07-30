@@ -1,4 +1,4 @@
-package com.dahaeng;
+package com.dahaeng.biz;
 
 import org.springframework.stereotype.Repository;
 
@@ -35,7 +35,7 @@ public class UserDAO {
     }
 
     public void deleteUser(UserVO vo) {
-        entityManager.remove(vo);
+        entityManager.remove(entityManager.find(UserVO.class, vo.getEmail()));
     }
 
 }

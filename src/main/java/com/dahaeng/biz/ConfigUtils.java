@@ -1,4 +1,4 @@
-package com.dahaeng;
+package com.dahaeng.biz;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
