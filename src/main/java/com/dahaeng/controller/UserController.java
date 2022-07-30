@@ -48,7 +48,7 @@ public class UserController {
     @RequestMapping("/withdrawal")
     public String withdrawal(@ModelAttribute("user") UserVO vo) {
         userService.deleteUser(vo);
-        return "join.jsp";
+        return "login.jsp";
     }
 
 }
