@@ -25,5 +25,7 @@
 
   <a href="/withdrawal" onclick="GoogleAuth.disconnect();">회원탈퇴</a>
 
+  <br>
+  <a href="/getNoteList">노트 목록 바로가기</a>
   </body>
 </html>

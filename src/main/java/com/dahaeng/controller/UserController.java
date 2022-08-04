@@ -16,7 +16,10 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginView() {
+    public String loginView(@ModelAttribute("user") UserVO vo) {
+        vo.setEmail("");
+        vo.setPassword("");
+        vo.setNickname("");
         return "login.jsp";
     }
 
@@ -48,6 +51,9 @@ public class UserController {
     @RequestMapping("/withdrawal")
     public String withdrawal(@ModelAttribute("user") UserVO vo) {
         userService.deleteUser(vo);
+        vo.setEmail("");
+        vo.setPassword("");
+        vo.setNickname("");
         return "login.jsp";
     }
 
