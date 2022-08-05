@@ -16,6 +16,14 @@
                     <td align="left"><input name="noteName" type="text"></td>
                 </tr>
                 <tr>
+                    <td bgcolor="orange" width="70">시작 날</td>
+                    <td align="left"><input name="startDate" type="date"></td>
+                </tr>
+                <tr>
+                    <td bgcolor="orange" width="70">끝나는 날</td>
+                    <td align="left"><input name="endDate" type="date"></td>
+                </tr>
+                <tr>
                     <td colspan="2" align="center">
                         <input type="submit" value=" 새 노트 등록 ">
                     </td>

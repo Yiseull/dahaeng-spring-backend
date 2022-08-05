@@ -1,5 +1,9 @@
 package com.dahaeng.biz;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -11,10 +15,13 @@ public class NoteVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int noteId;
     private String noteName;
+    @UpdateTimestamp
     private LocalDateTime lastUpdate;
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date startDate;
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endDate;
 
     public int getNoteId() {

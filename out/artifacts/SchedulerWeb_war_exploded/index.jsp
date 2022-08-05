@@ -24,6 +24,7 @@
   <a href="/logout" onclick="GoogleAuth.signOut();">Sign out</a>
 
   <a href="/withdrawal" onclick="GoogleAuth.disconnect();">회원탈퇴</a>
+  <a href="/login.jsp" onclick="GoogleAuth.disconnect();">구글회원탈퇴</a>
 
   <br>
   <a href="/getNoteList">노트 목록 바로가기</a>
