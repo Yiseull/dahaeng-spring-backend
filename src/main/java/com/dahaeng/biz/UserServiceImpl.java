@@ -15,8 +15,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public UserVO findByEmail(UserVO vo) {
-        return userDAO.findByEmail(vo);
+    public UserVO findByEmail(String mail) {
+        return userDAO.findByEmail(mail);
+    }
+
+    @Transactional(readOnly = true)
+    public UserVO findByNickname(String nickname) {
+        return userDAO.findByNickname(nickname);
     }
 
     @Transactional(readOnly = true)
