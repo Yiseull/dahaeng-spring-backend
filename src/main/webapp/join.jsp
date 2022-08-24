@@ -21,7 +21,7 @@
             <div class="mail_wrap">
                 <div class="mail_name">이메일</div>
                 <div class="mail_input_box">
-                    <input class="mail_input" type="text" name="email">
+                    <input class="mail_input" type="email" name="email">
                 </div>
                 <span id="mail_input_box_warn"></span>
                 <span class="final_mail_ck">이메일을 입력해주세요.</span>

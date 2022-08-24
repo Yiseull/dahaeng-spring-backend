@@ -1,5 +1,6 @@
 package com.dahaeng.controller;
 
+import com.dahaeng.biz.NoteVO;
 import com.dahaeng.biz.UserService;
 import com.dahaeng.biz.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.WebParam;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -132,7 +134,6 @@ public class UserController {
 
         }
     }
-
 
     /*닉네임 중복 확인*/
     @RequestMapping(value = "/nickNameChk", method = RequestMethod.POST)

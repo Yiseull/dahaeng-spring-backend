@@ -29,8 +29,13 @@ public class UserServiceImpl implements UserService {
         return userDAO.findByEmailAndPassword(vo);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void deleteUser(UserVO vo) {
         userDAO.deleteUser(vo);
+    }
+
+    @Transactional(readOnly = true)
+    public UserVO editUser(UserVO vo) {
+        return userDAO.editUser(vo);
     }
 }

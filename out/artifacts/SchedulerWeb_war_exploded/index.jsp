@@ -10,8 +10,8 @@
   <body>
   Hi, ${user.nickname}
   <br>
+  <!-- 사용자가 Google에서 로그아웃하지 않고 앱에서 로그아웃 -->
   <a href="/logout" onclick="signOut();">Log-out</a>
-
   <script>
     function signOut() {
       var auth2 = gapi.auth2.getAuthInstance();
@@ -28,5 +28,6 @@
 
   <br>
   <a href="/getNoteList">노트 목록 바로가기</a>
+
   </body>
 </html>

@@ -1,94 +1,94 @@
 package com.dahaeng.controller;
 
-import com.dahaeng.biz.ConfigUtils;
-import com.dahaeng.biz.GoogleLoginRequest;
-import com.dahaeng.biz.GoogleLoginResponse;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.PropertyNamingStrategy;
-import org.codehaus.jackson.map.annotate.JsonSerialize;
-import org.codehaus.jackson.type.TypeReference;
+import com.dahaeng.biz.UserService;
+import com.dahaeng.biz.UserVO;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Map;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.util.Collections;
 
 @Controller
 public class GoogleController {
 
     @Autowired
-    private ConfigUtils configUtils;
+    private UserService userService;
 
-    // 구글 로그인창 호출
-    @GetMapping(value = "/google")
-    public ResponseEntity<Object> moveGoogleInitUrl() {
-        String authUrl = configUtils.googleInitUrl();
-        URI redirectUri = null;
+    @Value("${google.client.id}")
+    private String CLIENT_ID;
+
+    @PostMapping("/index")
+    public String googleAuth(@RequestParam("credential") String idtoken, Model model) throws GeneralSecurityException, IOException {
+        System.out.println("GoogleController2");
+
+        HttpTransport transport = new NetHttpTransport();
+        JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+                // Specify the CLIENT_ID of the app that accesses the backend:
+                .setAudience(Collections.singletonList(CLIENT_ID))
+                // Or, if multiple clients access the backend:
+                //.setAudience(Arrays.asList(CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3))
+                .build();
+
+        // (Receive idTokenString by HTTPS POST)
+        GoogleIdToken idToken = null;
         try {
-            redirectUri = new URI(authUrl);
-            HttpHeaders httpHeaders = new HttpHeaders();
-            httpHeaders.setLocation(redirectUri);
-            return new ResponseEntity<>(httpHeaders, HttpStatus.SEE_OTHER);
-        } catch (URISyntaxException e) {
+            idToken = verifier.verify(idtoken);
+        } catch(GeneralSecurityException e) {
             e.printStackTrace();
         }
 
-        return ResponseEntity.badRequest().build();
-    }
+        if (idToken != null) {
+            Payload payload = idToken.getPayload();
 
-    // 구글 연동정보 조회
-    @GetMapping("/index")
-    public String googleAuth(Model model, @RequestParam(value = "code") String authCode) {
-        //HTTP Request를 위한 RestTemplate
-        RestTemplate restTemplate = new RestTemplate();
+            // Print user identifier
+            String userId = payload.getSubject();
+            System.out.println("User ID: " + userId);
 
-        //Google OAuth Access Token 요청을 위한 파라미터 세팅
-        GoogleLoginRequest googleOAuthRequestParam = GoogleLoginRequest
-                .builder()
-                .clientId(configUtils.getGoogleClientId())
-                .clientSecret(configUtils.getGoogleSecret())
-                .code(authCode)
-                .redirectUri(configUtils.getGoogleRedirectUri())
-                .grantType("authorization_code").build();
+            // Get profile information from payload
+            String email = payload.getEmail();
+//            boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+//            String name = (String) payload.get("name");
+//            String pictureUrl = (String) payload.get("picture");
+//            String locale = (String) payload.get("locale");
+//            String familyName = (String) payload.get("family_name");
+//            String givenName = (String) payload.get("given_name");
 
-        try {
-            //JSON 파싱을 위한 기본값 세팅
-            //요청시 파라미터는 스네이크 케이스로 세팅되므로 Object mapper에 미리 설정해준다.
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.setPropertyNamingStrategy(PropertyNamingStrategy.CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES);
-            mapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+            // 등록된 회원이 아니면 닉네임 입력 폼으로 이동
+            UserVO user = userService.findByEmail(email);
+            if (user == null) {
+                model.addAttribute(("email"), email);
+                return "nicknameForm.jsp";
+            }
+            model.addAttribute(("user"), user);
 
-            //AccessToken 발급 요청
-            ResponseEntity<String> resultEntity = restTemplate.postForEntity(configUtils.getGoogleAuthUrl() + "/token", googleOAuthRequestParam, String.class);
-
-            //Token Request
-            GoogleLoginResponse result = mapper.readValue(resultEntity.getBody(), new TypeReference<GoogleLoginResponse>() {
-            });
-
-            //ID Token만 추출 (사용자의 정보는 jwt로 인코딩 되어있다)
-            String jwtToken = result.getIdToken();
-            String requestUrl = UriComponentsBuilder.fromHttpUrl("https://oauth2.googleapis.com/tokeninfo")
-                    .queryParam("id_token", jwtToken).encode().toUriString();
-
-            String resultJson = restTemplate.getForObject(requestUrl, String.class);
-
-            Map<String,String> userInfo = mapper.readValue(resultJson, new TypeReference<Map<String, String>>(){});
-            model.addAllAttributes(userInfo);
-            model.addAttribute("token", result.getAccessToken());
+        } else {
+            System.out.println("Invalid ID token.");
+            return "redirect:login.jsp";
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        // 등록된 회원이면
         return "index.jsp";
     }
-}
 
+    @PostMapping("/googleSignUp")
+    public String editUser(UserVO vo, Model model) {
+        vo.setPassword("");
+        userService.insertUser(vo);
+        model.addAttribute(("user"), userService.findByEmail(vo.getEmail()));
+        return "index.jsp";
+    }
+
+}

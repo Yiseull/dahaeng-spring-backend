@@ -65,5 +65,9 @@ public class UserDAO {
     }
 
 
-
+    public UserVO editUser(UserVO vo) {
+        UserVO user = entityManager.find((UserVO.class), vo.getEmail());
+        user.setNickname(vo.getNickname());
+        return entityManager.merge(vo);
+    }
 }
