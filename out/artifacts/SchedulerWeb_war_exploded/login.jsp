@@ -28,9 +28,6 @@
     </form>
     <a href="join.jsp">Join</a>
 
-    <a href="/google">Google Login</a>
-
-
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <div id="g_id_onload"
          data-client_id="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com"
@@ -46,34 +43,6 @@
          data-shape="rectangular"
          data-logo_alignment="left">
     </div>
-
-
-<%--<div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"/>--%>
-<%--<script>--%>
-<%--    function onSignIn(googleUser) {--%>
-<%--        // Useful data for your client-side scripts:--%>
-<%--        var profile = googleUser.getBasicProfile();--%>
-<%--        console.log("ID: " + profile.getId()); // Don't send this directly to your server!--%>
-<%--        console.log('Full Name: ' + profile.getName());--%>
-<%--        console.log('Given Name: ' + profile.getGivenName());--%>
-<%--        console.log('Family Name: ' + profile.getFamilyName());--%>
-<%--        console.log("Image URL: " + profile.getImageUrl());--%>
-<%--        console.log("Email: " + profile.getEmail());--%>
-
-<%--        // The ID token you need to pass to your backend:--%>
-<%--        var id_token = googleUser.getAuthResponse().id_token;--%>
-<%--        console.log("ID Token: " + id_token);--%>
-
-<%--        // HTTPS POST 요청을 사용하여 서버에 ID 토큰을 보냅니다.--%>
-<%--        var xhr = new XMLHttpRequest();--%>
-<%--        xhr.open('POST', 'http://localhost:8080/index');--%>
-<%--        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');--%>
-<%--        xhr.onload = function() {--%>
-<%--            console.log('Signed in as: ' + xhr.responseText);--%>
-<%--        };--%>
-<%--        xhr.send(id_token);--%>
-<%--    }--%>
-<%--</script>--%>
 
 </body>
 </html>

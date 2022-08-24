@@ -28,9 +28,6 @@
     </form>
     <a href="join.jsp">Join</a>
 
-    <a href="/google">Google Login</a>
-
-
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <div id="g_id_onload"
          data-client_id="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com"

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class GoogleController {
     private String CLIENT_ID;
 
     @PostMapping("/index")
-    public String googleAuth(@RequestParam("credential") String idtoken, Model model) throws GeneralSecurityException, IOException {
+    public String googleAuth(@RequestParam("credential") String idtoken, Model model, HttpSession session) throws GeneralSecurityException, IOException {
         System.out.println("GoogleController2");
 
         HttpTransport transport = new NetHttpTransport();
@@ -60,12 +61,6 @@ public class GoogleController {
 
             // Get profile information from payload
             String email = payload.getEmail();
-//            boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-//            String name = (String) payload.get("name");
-//            String pictureUrl = (String) payload.get("picture");
-//            String locale = (String) payload.get("locale");
-//            String familyName = (String) payload.get("family_name");
-//            String givenName = (String) payload.get("given_name");
 
             // 등록된 회원이 아니면 닉네임 입력 폼으로 이동
             UserVO user = userService.findByEmail(email);
@@ -73,7 +68,7 @@ public class GoogleController {
                 model.addAttribute(("email"), email);
                 return "nicknameForm.jsp";
             }
-            model.addAttribute(("user"), user);
+            session.setAttribute("user", user);
 
         } else {
             System.out.println("Invalid ID token.");
@@ -84,10 +79,11 @@ public class GoogleController {
     }
 
     @PostMapping("/googleSignUp")
-    public String editUser(UserVO vo, Model model) {
+    public String editUser(UserVO vo, Model model, HttpSession session) {
         vo.setPassword("");
         userService.insertUser(vo);
-        model.addAttribute(("user"), userService.findByEmail(vo.getEmail()));
+        UserVO user = userService.findByEmail(vo.getEmail());
+        session.setAttribute("user", user);
         return "index.jsp";
     }
 
