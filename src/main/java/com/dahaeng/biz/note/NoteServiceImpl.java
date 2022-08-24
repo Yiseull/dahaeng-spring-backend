@@ -1,4 +1,4 @@
-package com.dahaeng.biz;
+package com.dahaeng.biz.note;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public List<NoteVO> getNoteList() {
-        return noteDAO.getNoteList();
+    public List<NoteVO> getNoteList(String email) {
+        return noteDAO.getNoteList(email);
     }
 }

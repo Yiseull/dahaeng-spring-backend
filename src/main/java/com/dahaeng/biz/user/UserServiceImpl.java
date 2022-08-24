@@ -1,4 +1,4 @@
-package com.dahaeng.biz;
+package com.dahaeng.biz.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

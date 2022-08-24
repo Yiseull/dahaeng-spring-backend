@@ -1,4 +1,4 @@
-package com.dahaeng.biz;
+package com.dahaeng.biz.user;
 
 public interface UserService {
     void insertUser(UserVO vo);

@@ -1,8 +1,7 @@
 package com.dahaeng.controller;
 
-import com.dahaeng.biz.NoteVO;
-import com.dahaeng.biz.UserService;
-import com.dahaeng.biz.UserVO;
+import com.dahaeng.biz.user.UserService;
+import com.dahaeng.biz.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -10,10 +9,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.mail.javamail.MimeMessagePreparator;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.jws.WebParam;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -35,14 +31,17 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public String login(UserVO vo, Model model) {
+    public String login(UserVO vo, Model model, HttpServletRequest request) {
         UserVO user = userService.findByEmailAndPassword(vo);
+        HttpSession session = request.getSession();
+        session.setAttribute("user",user);
         if (user != null) {
             model.addAttribute(("user"), user);
             return "index.jsp";
         }
         return "login.jsp";
     }
+
 
     @RequestMapping("/logout")
     public String logout(HttpSession session, @ModelAttribute("user") UserVO vo) {

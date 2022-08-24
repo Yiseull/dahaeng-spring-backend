@@ -1,7 +1,7 @@
 package com.dahaeng.controller;
 
-import com.dahaeng.biz.UserService;
-import com.dahaeng.biz.UserVO;
+import com.dahaeng.biz.user.UserService;
+import com.dahaeng.biz.user.UserVO;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;

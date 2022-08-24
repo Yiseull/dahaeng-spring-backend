@@ -1,10 +1,9 @@
-package com.dahaeng.biz;
+package com.dahaeng.biz.note;
 
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -28,8 +27,9 @@ public class NoteDAO {
         return (NoteVO) entityManager.find((NoteVO.class), vo.getNoteId());
     }
 
-    public List<NoteVO> getNoteList() {
-        String jpql = "select n from NoteVO n";
+    public List<NoteVO> getNoteList(String email) {
+
+        String jpql = "select n from NoteVO n where n.noteId In (select m.noteId from MemberVO m where m.email = '"+email+"')";
         return entityManager.createQuery(jpql).getResultList();
     }
 }

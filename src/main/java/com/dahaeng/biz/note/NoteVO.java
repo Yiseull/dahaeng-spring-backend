@@ -1,4 +1,4 @@
-package com.dahaeng.biz;
+package com.dahaeng.biz.note;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;

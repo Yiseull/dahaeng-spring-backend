@@ -1,4 +1,4 @@
-package com.dahaeng.biz;
+package com.dahaeng.biz.note;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ public interface NoteService {
 
     NoteVO getNote(NoteVO vo);
 
-    List<NoteVO> getNoteList();
+    List<NoteVO> getNoteList(String email);
 
 }

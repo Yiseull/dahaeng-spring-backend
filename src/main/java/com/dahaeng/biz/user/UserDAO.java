@@ -1,4 +1,4 @@
-package com.dahaeng.biz;
+package com.dahaeng.biz.user;
 
 import org.springframework.stereotype.Repository;
 
