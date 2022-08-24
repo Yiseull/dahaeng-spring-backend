@@ -34,8 +34,4 @@ public class UserServiceImpl implements UserService {
         userDAO.deleteUser(vo);
     }
 
-    @Transactional(readOnly = true)
-    public UserVO editUser(UserVO vo) {
-        return userDAO.editUser(vo);
-    }
 }
