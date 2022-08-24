@@ -1,11 +1,9 @@
 package com.dahaeng.biz.member;
 
 public interface MemberService {
-    public void insertMember(MemberVO vo);
+    void insertMember(MemberVO vo);
 
-    public MemberVO findByEmail(String mail);
+    void deleteMember(MemberVO vo);
 
-
-
-
+    MemberVO findByEmail(String mail);
 }

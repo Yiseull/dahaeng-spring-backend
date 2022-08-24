@@ -7,7 +7,7 @@ public interface NoteService {
 
     void updateNote(NoteVO vo);
 
-    void deleteNote(NoteVO vo);
+    void deleteNoteCompletely(NoteVO vo);
 
     NoteVO getNote(NoteVO vo);
 

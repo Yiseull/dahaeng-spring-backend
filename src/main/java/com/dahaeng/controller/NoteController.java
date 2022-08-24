@@ -20,9 +20,8 @@ public class NoteController {
     private NoteService noteService;
 
     @RequestMapping("/insertNote")
-    public String insertNote(NoteVO vo,HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.setAttribute("note",vo);
+    public String insertNote(NoteVO vo,Model model) {
+        model.addAttribute("note",vo);
         noteService.insertNote(vo);
         return "/insertMember";
     }
@@ -34,8 +33,16 @@ public class NoteController {
     }
 
     @RequestMapping("/deleteNote")
-    public String deleteNote(NoteVO vo) {
-        noteService.deleteNote(vo);
+    public String deleteNote(NoteVO vo,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        session.setAttribute("note",vo);
+        System.out.println("deleteNote 나감");
+        return "/deleteMember";
+    }
+
+    @RequestMapping("/deleteNoteCompletely")
+    public String deleteNoteCompletely(NoteVO vo) {
+        noteService.deleteNoteCompletely(vo);
         return "/getNoteList";
     }
 

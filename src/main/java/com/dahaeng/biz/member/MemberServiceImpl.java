@@ -18,6 +18,12 @@ public class MemberServiceImpl implements MemberService{
 
     @Transactional
     @Override
+    public void deleteMember(MemberVO vo) {
+        memberDAO.deleteMember(vo);
+    }
+
+    @Transactional
+    @Override
     public MemberVO findByEmail(String mail) {
         return memberDAO.findByEmail(mail);
     }

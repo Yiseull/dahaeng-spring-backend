@@ -25,8 +25,8 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public void deleteNote(NoteVO vo) {
-        noteDAO.deleteNote(vo);
+    public void deleteNoteCompletely(NoteVO vo) {
+        noteDAO.deleteNoteCompletely(vo);
     }
 
     @Transactional

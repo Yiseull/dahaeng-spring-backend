@@ -19,7 +19,7 @@ public class NoteDAO {
         entityManager.merge(vo);
     }
 
-    public void deleteNote(NoteVO vo) {
+    public void deleteNoteCompletely(NoteVO vo) {
         entityManager.remove(entityManager.find(NoteVO.class, vo.getNoteId()));
     }
 

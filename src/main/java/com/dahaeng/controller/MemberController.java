@@ -28,7 +28,19 @@ public class MemberController {
         vo.setNoteId(note.getNoteId());
         memberService.insertMember(vo);
 
-        session.removeAttribute("note");
+        return "getNoteList";
+    }
+
+    @RequestMapping("/deleteMember")
+    public String deleteMember(HttpServletRequest request, MemberVO vo){
+        HttpSession session = request.getSession();
+        UserVO user = (UserVO) session.getAttribute("user");
+        NoteVO note = (NoteVO) session.getAttribute("note");
+
+        vo.setEmail(user.getEmail());
+        vo.setNoteId(note.getNoteId());
+        memberService.deleteMember(vo);
+
         return "getNoteList";
     }
 
