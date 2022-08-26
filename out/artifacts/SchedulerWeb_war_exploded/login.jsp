@@ -1,9 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <title>Login</title>
 </head>
@@ -28,12 +26,11 @@
     </form>
     <a href="join.jsp">Join</a>
 
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <div id="g_id_onload"
          data-client_id="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com"
          data-ux_mode="popup"
-         data-login_uri="http://localhost:8080/index"
-         data-auto_prompt="false">
+         data-auto_select="true"
+         data-login_uri="http://localhost:8080/index">
     </div>
     <div class="g_id_signin"
          data-type="standard"

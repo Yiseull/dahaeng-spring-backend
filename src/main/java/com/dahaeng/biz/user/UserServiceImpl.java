@@ -10,26 +10,31 @@ public class UserServiceImpl implements UserService {
     private UserDAO userDAO;
 
     @Transactional
+    @Override
     public void insertUser(UserVO vo) {
         userDAO.insertUser(vo);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
+    @Override
     public UserVO findByEmail(String mail) {
         return userDAO.findByEmail(mail);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
+    @Override
     public UserVO findByNickname(String nickname) {
         return userDAO.findByNickname(nickname);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
+    @Override
     public UserVO findByEmailAndPassword(UserVO vo) {
         return userDAO.findByEmailAndPassword(vo);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
+    @Override
     public void deleteUser(UserVO vo) {
         userDAO.deleteUser(vo);
     }

@@ -83,7 +83,8 @@ public class GoogleController {
         vo.setPassword("");
         userService.insertUser(vo);
         UserVO user = userService.findByEmail(vo.getEmail());
-        session.setAttribute("user", user);
+        //session.setAttribute("user", user);
+        model.addAttribute("user", user);
         return "index.jsp";
     }
 
