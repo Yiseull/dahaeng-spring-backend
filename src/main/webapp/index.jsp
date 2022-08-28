@@ -1,10 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
   <head>
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
-
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <title>Hi</title>
@@ -12,31 +8,30 @@
   <body>
   Hi, ${user.nickname}
   <br>
-  <!-- 사용자가 Google에서 로그아웃하지 않고 앱에서 로그아웃 -->
-  <a href="/logout" onclick="signOut();">Log-out</a>
-  <script>
-    function signOut() {
-      var auth2 = gapi.auth2.getAuthInstance();
-      auth2.signOut().then(function () {
-        console.log('User signed out.');
-      });
-    }
-  </script>
-
-  <a href="/logout" onclick="GoogleAuth.signOut();">Sign out</a>
+  <a href="/logout" onclick="google.accounts.id.disableAutoSelect();">Sign out</a>
+  <%--  <div class="g_id_signout">Sign Out</div>--%>
+  <%--  <script>--%>
+  <%--    function deleteAccount() {--%>
+  <%--      const button = document.getElementById(‘signout_button’);--%>
+  <%--      button.onclick = () => {--%>
+  <%--        google.accounts.id.disableAutoSelect();--%>
+  <%--      }--%>
+  <%--    }--%>
+  <%--  </script>--%>
 
   <a href="/withdrawal" onclick="GoogleAuth.disconnect();">회원탈퇴</a>
 
-  <div class="g_id_signout">Sign Out</div>
-
-  <a href="/withdrawal" onclick="deleteAccount();">deleteAccount</a>
-  <script>
-    function deleteAccount() {
-      google.accounts.id.revoke('user@google.com', done => {
-        console.log('consent revoked');
-      });
-    }
-  </script>
+<%--  <a href="/withdrawal" onclick="deleteAccount();">deleteAccount</a>--%>
+<%--  <script>--%>
+<%--    var googleUserInfo = googleAuth.userinfo.get();--%>
+<%--    var email = googleUserInfo.data.email;--%>
+<%--    --%>
+<%--    function deleteAccount() {--%>
+<%--      google.accounts.id.revoke(email, done => {--%>
+<%--        console.log(email + 'consent revoked');--%>
+<%--      });--%>
+<%--    }--%>
+<%--  </script>--%>
 
   <br>
   <a href="/getNoteList">노트 목록 바로가기</a>

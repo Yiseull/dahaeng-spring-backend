@@ -79,12 +79,11 @@ public class GoogleController {
     }
 
     @PostMapping("/googleSignUp")
-    public String editUser(UserVO vo, Model model, HttpSession session) {
+    public String editUser(UserVO vo, HttpSession session) {
         vo.setPassword("");
         userService.insertUser(vo);
         UserVO user = userService.findByEmail(vo.getEmail());
-        //session.setAttribute("user", user);
-        model.addAttribute("user", user);
+        session.setAttribute("user", user);
         return "index.jsp";
     }
 
