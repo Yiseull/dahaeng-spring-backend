@@ -5,6 +5,7 @@ import org.springframework.stereotype.Repository;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Repository
 public class UserDAO {
@@ -62,6 +63,12 @@ public class UserDAO {
 
     public void deleteUser(UserVO vo) {
         entityManager.remove(entityManager.find(UserVO.class, vo.getEmail()));
+    }
+
+    public List<UserVO> findMember(String email) {
+
+        String jpql = "select u from UserVO u where u.email Like '%"+email+"%'";
+        return entityManager.createQuery(jpql).getResultList();
     }
 
 }

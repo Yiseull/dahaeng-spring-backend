@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
     @Autowired
@@ -39,4 +41,9 @@ public class UserServiceImpl implements UserService {
         userDAO.deleteUser(vo);
     }
 
+    @Transactional
+    @Override
+    public List<UserVO> findMember(String email) {
+        return userDAO.findMember(email);
+    }
 }

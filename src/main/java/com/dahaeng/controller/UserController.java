@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.Random;
 
 @Controller
@@ -149,6 +150,15 @@ public class UserController {
             return "success";
 
         }
+    }
+
+    @RequestMapping(value = "/findMember", method = RequestMethod.GET)
+    public String findMember(Model model, String email) {
+
+        List <UserVO> findmember = userService.findMember(email);
+        model.addAttribute("findMemberList", findmember);
+
+        return "inviteMember.jsp";
     }
 }
 
