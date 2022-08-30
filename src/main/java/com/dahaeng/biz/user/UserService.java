@@ -1,6 +1,7 @@
 package com.dahaeng.biz.user;
 
 import java.util.List;
+
 public interface UserService {
     void insertUser(UserVO vo);
 
