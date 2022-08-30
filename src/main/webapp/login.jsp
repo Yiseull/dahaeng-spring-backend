@@ -3,6 +3,8 @@
 <head>
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
+    <script type="text/javascript" src="https://static.nid.naver.com/js/naverLogin_implicit-1.0.3.js" charset="utf-8"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <title>Login</title>
 </head>
 <body>
@@ -30,7 +32,7 @@
          data-client_id="337820958103-d43avd5b12sbr020j8q26jpflvsq53ng.apps.googleusercontent.com"
          data-ux_mode="popup"
          data-auto_select="true"
-         data-login_uri="http://localhost:8080/index">
+         data-login_uri="http://localhost:8080/google">
     </div>
     <div class="g_id_signin"
          data-type="standard"
@@ -41,5 +43,17 @@
          data-logo_alignment="left">
     </div>
 
+    <!-- 네이버 로그인 버튼 노출 영역 -->
+    <div id="naver_id_login"></div>
+    <!-- //네이버 로그인 버튼 노출 영역 -->
+    <script type="text/javascript">
+        var naver_id_login = new naver_id_login("khPp0L_xboWYERTj5rB1", "http://localhost:8080/login/naver");
+        var state = naver_id_login.getUniqState();
+        naver_id_login.setButton("white", 2,40);
+        naver_id_login.setDomain("http://localhost:8080/login");
+        naver_id_login.setState(state);
+        naver_id_login.setPopup();
+        naver_id_login.init_naver_id_login();
+    </script>
 </body>
 </html>

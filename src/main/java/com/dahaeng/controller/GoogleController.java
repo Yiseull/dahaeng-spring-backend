@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -30,7 +31,7 @@ public class GoogleController {
     @Value("${google.client.id}")
     private String CLIENT_ID;
 
-    @PostMapping("/index")
+    @PostMapping("/google")
     public String googleAuth(@RequestParam("credential") String idtoken, Model model, HttpSession session) throws GeneralSecurityException, IOException {
         System.out.println("GoogleController2");
 
@@ -66,20 +67,20 @@ public class GoogleController {
             UserVO user = userService.findByEmail(email);
             if (user == null) {
                 model.addAttribute(("email"), email);
-                return "nicknameForm.jsp";
+                return "/nicknameForm.jsp";
             }
             session.setAttribute("user", user);
 
         } else {
             System.out.println("Invalid ID token.");
-            return "redirect:login.jsp";
+            return "/login";
         }
         // 등록된 회원이면
         return "index.jsp";
     }
 
     @PostMapping("/googleSignUp")
-    public String editUser(UserVO vo, HttpSession session) {
+    public String googleSignUp(UserVO vo, HttpSession session) {
         vo.setPassword("");
         userService.insertUser(vo);
         UserVO user = userService.findByEmail(vo.getEmail());

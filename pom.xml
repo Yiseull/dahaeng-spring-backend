@@ -127,6 +127,13 @@
             <version>1.42.2</version>
         </dependency>
 
+        <!-- naver -->
+        <dependency>
+            <groupId>com.github.scribejava</groupId>
+            <artifactId>scribejava-core</artifactId>
+            <version>8.3.1</version>
+        </dependency>
+
     </dependencies>
 
 </project>

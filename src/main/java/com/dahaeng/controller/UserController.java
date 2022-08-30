@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Random;
 
-
 @Controller
 @SessionAttributes("user")
 public class UserController {
@@ -25,12 +24,7 @@ public class UserController {
     @Autowired
     private JavaMailSender mailSender;
 
-    @RequestMapping(value = "/login", method = RequestMethod.GET)
-    public String loginView() {
-        return "login.jsp";
-    }
-
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @RequestMapping(value = "/login")
     public String login(UserVO vo, Model model, HttpServletRequest request) {
         UserVO user = userService.findByEmailAndPassword(vo);
         HttpSession session = request.getSession();

@@ -8,7 +8,7 @@
   <body>
   Hi, ${user.nickname}
   <br>
-  <a href="/logout" onclick="google.accounts.id.disableAutoSelect();">Sign out2</a>
+  <a href="/logout" onclick="google.accounts.id.disableAutoSelect();">Sign out</a>
   <%--  <div class="g_id_signout">Sign Out</div>--%>
   <%--  <script>--%>
   <%--    function deleteAccount() {--%>
