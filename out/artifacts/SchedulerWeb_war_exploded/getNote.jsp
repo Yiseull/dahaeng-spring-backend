@@ -38,7 +38,8 @@
         <hr>
         <a href="/insertNote.jsp">노트등록</a>&nbsp;&nbsp;&nbsp;
         <a href="/deleteNote?noteId=${note.noteId}">노트삭제</a>&nbsp;&nbsp;&nbsp;
-        <a href="/deleteNoteCompletely?noteId=${note.noteId}">노트완전삭제</a>&nbsp;&nbsp;&nbsp;
+        <a href="/deleteNoteCompletely?noteId=${note.noteId}">노트완전삭제</a>
+        <a href="/inviteMember.jsp">멤버 추가 페이지</a>
         <a href="/getNoteList">노트목록</a>
     </center>
 </body>

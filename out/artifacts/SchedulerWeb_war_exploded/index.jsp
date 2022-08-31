@@ -35,6 +35,7 @@
 
   <br>
   <a href="/getNoteList">노트 목록 바로가기</a>
+  <a href="/editUser.jsp">개인 정보 수정</a>
 
   </body>
 </html>

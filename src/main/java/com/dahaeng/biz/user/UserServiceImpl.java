@@ -46,4 +46,10 @@ public class UserServiceImpl implements UserService {
     public List<UserVO> findMember(String email) {
         return userDAO.findMember(email);
     }
+
+    @Transactional
+    @Override
+    public UserVO updateUser(UserVO vo, String type) {
+        return userDAO.updateUser(vo, type);
+    }
 }

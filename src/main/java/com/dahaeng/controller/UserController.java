@@ -160,5 +160,21 @@ public class UserController {
 
         return "inviteMember.jsp";
     }
+
+    @RequestMapping("/editNickname")
+    public String editNickname(@ModelAttribute("user") UserVO vo, HttpSession session) {
+        System.out.println(vo);
+        UserVO user = userService.updateUser(vo, "nickname");
+        vo.setNickname(user.getNickname());
+        return "index.jsp";
+    }
+
+    @RequestMapping("/editPassword")
+    public String editPassword(@ModelAttribute("user") UserVO vo, HttpSession session) {
+        System.out.println(vo);
+        UserVO user = userService.updateUser(vo, "password");
+        vo.setNickname(user.getPassword());
+        return "index.jsp";
+    }
 }
 

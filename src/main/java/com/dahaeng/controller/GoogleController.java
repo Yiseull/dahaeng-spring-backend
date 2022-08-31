@@ -67,7 +67,7 @@ public class GoogleController {
             UserVO user = userService.findByEmail(email);
             if (user == null) {
                 model.addAttribute(("email"), email);
-                return "/nicknameForm.jsp";
+                return "nicknameForm.jsp";
             }
             session.setAttribute("user", user);
 

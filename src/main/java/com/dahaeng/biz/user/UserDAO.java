@@ -71,4 +71,21 @@ public class UserDAO {
         return entityManager.createQuery(jpql).getResultList();
     }
 
+    public UserVO updateUser(UserVO vo, String type) {
+        String jpql;
+        if (type.equals("nickname")) {
+            jpql = "UPDATE UserVO u SET u.nickname=?1 WHERE u.email = ?2";
+            entityManager.createQuery(jpql)
+                    .setParameter(1, vo.getNickname())
+                    .setParameter(2, vo.getEmail())
+                    .executeUpdate();
+        } else {
+            jpql = "UPDATE UserVO u SET u.password=?1 WHERE u.email = ?2";
+            entityManager.createQuery(jpql)
+                    .setParameter(1, vo.getPassword())
+                    .setParameter(2, vo.getEmail())
+                    .executeUpdate();
+        }
+        return (UserVO) entityManager.find((UserVO.class), vo.getEmail());
+    }
 }

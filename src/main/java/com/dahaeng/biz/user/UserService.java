@@ -15,4 +15,5 @@ public interface UserService {
 
     List<UserVO> findMember(String email);
 
+    UserVO updateUser(UserVO vo, String type);
 }
