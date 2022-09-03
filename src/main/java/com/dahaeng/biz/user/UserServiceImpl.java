@@ -31,14 +31,14 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserVO findByEmailAndPassword(UserVO vo) {
-        return userDAO.findByEmailAndPassword(vo);
+    public UserVO findByEmailAndPassword(String email, String password) {
+        return userDAO.findByEmailAndPassword(email, password);
     }
 
     @Transactional
     @Override
-    public void deleteUser(UserVO vo) {
-        userDAO.deleteUser(vo);
+    public void deleteUser(String email) {
+        userDAO.deleteUser(email);
     }
 
     @Transactional
@@ -49,7 +49,13 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public UserVO updateUser(UserVO vo, String type) {
-        return userDAO.updateUser(vo, type);
+    public void editNickname(String email, String nickname) {
+        userDAO.editNickname(email, nickname);
+    }
+
+    @Transactional
+    @Override
+    public void editPassword(String email, String password) {
+        userDAO.editPassword(email, password);
     }
 }

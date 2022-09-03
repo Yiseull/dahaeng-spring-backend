@@ -16,11 +16,11 @@ public class UserDAO {
         entityManager.persist(vo);
     }
 
-    public UserVO findByEmailAndPassword(UserVO vo) {
+    public UserVO findByEmailAndPassword(String email, String password) {
         String jpql = "SELECT u FROM UserVO u WHERE u.email = ?1 and u.password = ?2";
         TypedQuery<UserVO> query = entityManager.createQuery(jpql, UserVO.class)
-                .setParameter(1, vo.getEmail())
-                .setParameter(2, vo.getPassword());
+                .setParameter(1, email)
+                .setParameter(2, password);
         UserVO user = null;
         try {
             user = query.getSingleResult();
@@ -61,8 +61,8 @@ public class UserDAO {
     //    return (UserVO) entityManager.find((UserVO.class), vo.getEmail());
     //}
 
-    public void deleteUser(UserVO vo) {
-        entityManager.remove(entityManager.find(UserVO.class, vo.getEmail()));
+    public void deleteUser(String email) {
+        entityManager.remove(entityManager.find(UserVO.class, email));
     }
 
     public List<UserVO> findMember(String email) {
@@ -71,21 +71,21 @@ public class UserDAO {
         return entityManager.createQuery(jpql).getResultList();
     }
 
-    public UserVO updateUser(UserVO vo, String type) {
+    public void editNickname(String email, String nickname) {
         String jpql;
-        if (type.equals("nickname")) {
-            jpql = "UPDATE UserVO u SET u.nickname=?1 WHERE u.email = ?2";
-            entityManager.createQuery(jpql)
-                    .setParameter(1, vo.getNickname())
-                    .setParameter(2, vo.getEmail())
-                    .executeUpdate();
-        } else {
-            jpql = "UPDATE UserVO u SET u.password=?1 WHERE u.email = ?2";
-            entityManager.createQuery(jpql)
-                    .setParameter(1, vo.getPassword())
-                    .setParameter(2, vo.getEmail())
-                    .executeUpdate();
-        }
-        return (UserVO) entityManager.find((UserVO.class), vo.getEmail());
+        jpql = "UPDATE UserVO u SET u.nickname=?1 WHERE u.email = ?2";
+        entityManager.createQuery(jpql)
+                .setParameter(1, nickname)
+                .setParameter(2, email)
+                .executeUpdate();
+    }
+
+    public void editPassword(String email, String password) {
+        String jpql;
+        jpql = "UPDATE UserVO u SET u.password=?1 WHERE u.email = ?2";
+        entityManager.createQuery(jpql)
+                .setParameter(1, password)
+                .setParameter(2, email)
+                .executeUpdate();
     }
 }

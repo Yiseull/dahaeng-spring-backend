@@ -9,11 +9,13 @@ public interface UserService {
 
     UserVO findByNickname(String nickname);
 
-    UserVO findByEmailAndPassword(UserVO vo);
+    UserVO findByEmailAndPassword(String email, String password);
 
-    void deleteUser(UserVO vo);
+    void deleteUser(String email);
 
     List<UserVO> findMember(String email);
 
-    UserVO updateUser(UserVO vo, String type);
+    void editNickname(String email, String nickname);
+
+    void editPassword(String email, String password);
 }
