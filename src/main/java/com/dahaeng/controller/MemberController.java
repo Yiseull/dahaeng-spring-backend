@@ -2,46 +2,46 @@ package com.dahaeng.controller;
 
 import com.dahaeng.biz.member.MemberService;
 import com.dahaeng.biz.member.MemberVO;
-import com.dahaeng.biz.note.NoteVO;
-import com.dahaeng.biz.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-@Controller
-@SessionAttributes("member")
+@RestController
+@RequestMapping("/member")
 public class MemberController {
     @Autowired
     private MemberService memberService;
 
-    @RequestMapping("/insertMember")
-    public String insertMember(HttpServletRequest request,MemberVO vo) {
-        HttpSession session = request.getSession();
-        UserVO user = (UserVO) session.getAttribute("user");
-        NoteVO note = (NoteVO) session.getAttribute("note");
+    @PostMapping("/insert")
+    public ResponseEntity<String> insert(@RequestBody MemberVO vo) {
+        ResponseEntity<String> entity = null;
 
-        vo.setEmail(user.getEmail());
-        vo.setNoteId(note.getNoteId());
-        memberService.insertMember(vo);
+        try {
+            memberService.insertMember(vo);
+            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
-        return "getNoteList";
+        return entity;
     }
 
-    @RequestMapping("/deleteMember")
-    public String deleteMember(HttpServletRequest request, MemberVO vo){
-        HttpSession session = request.getSession();
-        UserVO user = (UserVO) session.getAttribute("user");
-        NoteVO note = (NoteVO) session.getAttribute("note");
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> delete(@RequestBody MemberVO vo){
+        ResponseEntity<String> entity = null;
 
-        vo.setEmail(user.getEmail());
-        vo.setNoteId(note.getNoteId());
-        memberService.deleteMember(vo);
+        try {
+            memberService.deleteMember(vo);
+            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
 
-        return "getNoteList";
+        return entity;
     }
+
 
 }

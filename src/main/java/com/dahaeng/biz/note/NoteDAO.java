@@ -19,12 +19,12 @@ public class NoteDAO {
         entityManager.merge(vo);
     }
 
-    public void deleteNoteCompletely(NoteVO vo) {
-        entityManager.remove(entityManager.find(NoteVO.class, vo.getNoteId()));
+    public void deleteNoteCompletely(int noteId) {
+        entityManager.remove(entityManager.find(NoteVO.class, noteId));
     }
 
-    public NoteVO getNote(NoteVO vo) {
-        return (NoteVO) entityManager.find((NoteVO.class), vo.getNoteId());
+    public NoteVO getNote(int noteId) {
+        return (NoteVO) entityManager.find((NoteVO.class), noteId);
     }
 
     public List<NoteVO> getNoteList(String email) {

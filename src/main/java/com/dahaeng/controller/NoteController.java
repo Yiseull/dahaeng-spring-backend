@@ -4,61 +4,101 @@ import com.dahaeng.biz.note.NoteService;
 import com.dahaeng.biz.note.NoteVO;
 import com.dahaeng.biz.user.UserVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import java.util.List;
+import java.util.Map;
 
-@Controller
-@SessionAttributes("note")
+@RestController
+@RequestMapping("/note")
 public class NoteController {
     @Autowired
     private NoteService noteService;
 
-    @RequestMapping("/insertNote")
-    public String insertNote(NoteVO vo,Model model) {
-        model.addAttribute("note",vo);
-        noteService.insertNote(vo);
-        return "/insertMember";
+    @PostMapping("/insert")
+    public ResponseEntity<String> insert(@RequestBody NoteVO vo) {
+        ResponseEntity<String> entity = null;
+
+        try {
+            noteService.insertNote(vo);
+            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
     }
 
-    @RequestMapping("/updateNote")
-    public String updateNote(@ModelAttribute("note") NoteVO vo) {
-        noteService.updateNote(vo);
-        return "/getNoteList";
+    @PostMapping("/update")
+    public ResponseEntity<String> update(@RequestBody NoteVO vo) {
+        ResponseEntity<String> entity = null;
+
+        try {
+            noteService.updateNote(vo);
+            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+        return entity;
     }
 
-    @RequestMapping("/deleteNote")
-    public String deleteNote(NoteVO vo,HttpServletRequest request){
-        HttpSession session = request.getSession();
-        session.setAttribute("note",vo);
-        System.out.println("deleteNote 나감");
-        return "/deleteMember";
+
+//    @DeleteMapping("/delete")
+//    public String delete(@RequestBody NoteVO vo){
+//        ResponseEntity<String> entity = null;
+//
+//        return entity;
+//    }
+
+    @DeleteMapping("/deleteCompletely")
+    public ResponseEntity<String> deleteCompletely(@RequestBody Map<String, Object> param) {
+        ResponseEntity<String> entity = null;
+        int noteId = (int) param.get("noteId");
+
+        try {
+            noteService.deleteNoteCompletely(noteId);
+            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
     }
 
-    @RequestMapping("/deleteNoteCompletely")
-    public String deleteNoteCompletely(NoteVO vo) {
-        noteService.deleteNoteCompletely(vo);
-        return "/getNoteList";
+    @GetMapping("/get")
+    public ResponseEntity<NoteVO> get(@RequestBody Map<String, Object> param) {
+        ResponseEntity<NoteVO> entity = null;
+        int noteId = (int) param.get("noteId");
+
+        try {
+            entity = new ResponseEntity<NoteVO>(noteService.getNote(noteId), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
     }
 
-    @RequestMapping("/getNote")
-    public String getNote(NoteVO vo, Model model) {
-        model.addAttribute("note", noteService.getNote(vo)); // Model 정보 저장
-        return "getNote.jsp";  // View 이름 리턴
-    }
+    @GetMapping("/list")
+    public ResponseEntity<List<NoteVO>> list(@RequestBody Map<String, Object> param) {
+        ResponseEntity<List<NoteVO>> entity = null;
+        String email = (String) param.get("email");
 
-    @RequestMapping("/getNoteList")
-    public String getNoteList(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        UserVO user = (UserVO) session.getAttribute("user");
+        try {
+            entity = new ResponseEntity<>(
+                    noteService.getNoteList(email), HttpStatus.OK);
 
-        // Model 정보 저장
-        model.addAttribute("noteList", noteService.getNoteList(user.getEmail()));
-        return "getNoteList.jsp";  // View 이름 리턴
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        return entity;
     }
 }

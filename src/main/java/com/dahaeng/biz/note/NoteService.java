@@ -7,9 +7,9 @@ public interface NoteService {
 
     void updateNote(NoteVO vo);
 
-    void deleteNoteCompletely(NoteVO vo);
+    void deleteNoteCompletely(int noteId);
 
-    NoteVO getNote(NoteVO vo);
+    NoteVO getNote(int noteId);
 
     List<NoteVO> getNoteList(String email);
 

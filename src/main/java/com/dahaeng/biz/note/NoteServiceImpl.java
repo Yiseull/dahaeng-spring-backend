@@ -25,14 +25,14 @@ public class NoteServiceImpl implements NoteService {
 
     @Transactional
     @Override
-    public void deleteNoteCompletely(NoteVO vo) {
-        noteDAO.deleteNoteCompletely(vo);
+    public void deleteNoteCompletely(int noteId) {
+        noteDAO.deleteNoteCompletely(noteId);
     }
 
     @Transactional
     @Override
-    public NoteVO getNote(NoteVO vo) {
-        return noteDAO.getNote(vo);
+    public NoteVO getNote(int noteId) {
+        return noteDAO.getNote(noteId);
     }
 
     @Transactional
