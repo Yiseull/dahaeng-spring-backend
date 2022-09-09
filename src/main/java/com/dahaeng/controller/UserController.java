@@ -67,7 +67,7 @@ public class UserController {
         return entity;
     }
 
-    @PostMapping("/delete")
+    @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@RequestBody Map<String, Object> param) {
         ResponseEntity<String> entity = null;
         String email = (String) param.get("email");
@@ -92,7 +92,7 @@ public class UserController {
 
     @Value("${mail.username}")
     private String mailusername;
-    @GetMapping("/mail-authentication")
+    @PostMapping("/mail-authentication")
     @ResponseBody
     public ResponseEntity<String> mailAuthentication(@RequestBody Map<String, Object> param) throws Exception{
         ResponseEntity<String> entity = null;
