@@ -1,7 +1,9 @@
 package com.dahaeng.biz.naver;
 
 import com.github.scribejava.core.builder.api.DefaultApi20;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NaverLoginApi extends DefaultApi20 {
 
     protected NaverLoginApi() {

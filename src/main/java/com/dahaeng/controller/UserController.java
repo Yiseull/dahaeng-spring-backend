@@ -2,6 +2,7 @@ package com.dahaeng.controller;
 
 import com.dahaeng.biz.user.UserService;
 import com.dahaeng.biz.user.UserVO;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -93,9 +94,8 @@ public class UserController {
     @Value("${mail.username}")
     private String mailusername;
     @PostMapping("/mail-authentication")
-    @ResponseBody
-    public ResponseEntity<String> mailAuthentication(@RequestBody Map<String, Object> param) throws Exception{
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> mailAuthentication(@RequestBody Map<String, Object> param) throws Exception{
+        ResponseEntity<JSONObject> entity = null;
         String email = (String) param.get("email");
 
         /* 인증번호(난수) 생성 */
@@ -122,10 +122,13 @@ public class UserController {
             helper.setText(content,true);
             mailSender.send(message);
 
-            entity = new ResponseEntity<String>(Integer.toString(checkNum), HttpStatus.OK);
+            JSONObject obj = new JSONObject();
+            obj.put("checkNum", Integer.toString(checkNum));
+
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         }catch(Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return entity;

@@ -76,20 +76,15 @@
           <element id="library" level="project" name="Maven: io.opencensus:opencensus-contrib-http-util:0.31.1" />
           <element id="library" level="project" name="Maven: com.google.guava:listenablefuture:9999.0-empty-to-avoid-conflict-with-guava" />
           <element id="library" level="project" name="Maven: com.google.api-client:google-api-client-jackson2:2.0.0" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.3" />
           <element id="library" level="project" name="Maven: com.google.http-client:google-http-client-jackson2:1.42.2" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.12.3" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.12.3" />
-          <element id="library" level="project" name="Maven: com.github.scribejava:scribejava-core:8.3.1" />
-          <element id="library" level="project" name="Maven: com.github.scribejava:scribejava-java8:8.3.1" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.12.7" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-core:2.12.7" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.3" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.7" />
           <element id="library" level="project" name="Maven: com.googlecode.json-simple:json-simple:1.1.1" />
           <element id="library" level="project" name="Maven: junit:junit:4.10" />
           <element id="library" level="project" name="Maven: org.hamcrest:hamcrest-core:1.1" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.12.7" />
+          <element id="library" level="project" name="Maven: com.github.scribejava:scribejava-core:2.8.1" />
         </element>
       </element>
     </root>
