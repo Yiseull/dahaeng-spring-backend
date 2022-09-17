@@ -80,11 +80,11 @@ public class UserDAO {
                 .executeUpdate();
     }
 
-    public void editPassword(String email, String password) {
+    public void editPassword(String email, String changeencodepwd) {
         String jpql;
         jpql = "UPDATE UserVO u SET u.password=?1 WHERE u.email = ?2";
         entityManager.createQuery(jpql)
-                .setParameter(1, password)
+                .setParameter(1, changeencodepwd)
                 .setParameter(2, email)
                 .executeUpdate();
     }
