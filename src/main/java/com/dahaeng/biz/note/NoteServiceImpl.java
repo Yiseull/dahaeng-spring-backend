@@ -40,4 +40,10 @@ public class NoteServiceImpl implements NoteService {
     public List<NoteVO> getNoteList(String email) {
         return noteDAO.getNoteList(email);
     }
+
+    @Transactional
+    @Override
+    public int getNoteId() {
+        return noteDAO.getNoteId();
+    }
 }

@@ -1,9 +1,11 @@
 package com.dahaeng.biz.note;
 
+import com.dahaeng.biz.member.MemberVO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
@@ -31,5 +33,10 @@ public class NoteDAO {
 
         String jpql = "select n from NoteVO n where n.noteId In (select m.noteId from MemberVO m where m.email = '"+email+"')";
         return entityManager.createQuery(jpql).getResultList();
+    }
+
+    public int getNoteId() {
+        String jpql = "SELECT max(n.noteId) FROM NoteVO n";
+        return (int) entityManager.createQuery(jpql).getSingleResult();
     }
 }

@@ -3,6 +3,7 @@ package com.dahaeng.controller;
 import com.dahaeng.biz.category.CategoryService;
 import com.dahaeng.biz.category.CategoryVO;
 
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,53 +13,63 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/category")
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
     @PostMapping("/insert")
-    public ResponseEntity<String> insert(@RequestBody CategoryVO vo) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> insert(@RequestBody CategoryVO vo) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
 
         try {
             System.out.println("/insert");
             categoryService.insertCategory(vo);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
 
         return entity;
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> update(@RequestBody CategoryVO vo) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> update(@RequestBody CategoryVO vo) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
 
         try {
             categoryService.updateCategory(vo);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
 
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestBody Map<String, Object> param) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> delete(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
         int categoryId = (int) param.get("categoryId");
 
         try {
             categoryService.deleteCategory(categoryId);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
 
         return entity;
@@ -79,7 +90,7 @@ public class CategoryController {
         return entity;
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<List<CategoryVO>> list(@RequestBody Map<String, Object> param) {
         ResponseEntity<List<CategoryVO>> entity = null;
         int noteId = (int) param.get("noteId");

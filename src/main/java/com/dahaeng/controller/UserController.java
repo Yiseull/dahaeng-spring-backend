@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Random;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/user")
 public class UserController {
     @Autowired
@@ -30,7 +31,6 @@ public class UserController {
     private BCryptPasswordEncoder pwdEncoder;
 
     // 로그인은 정보 조회지만 Get을 사용하는 경우 ID, PW 정보가 노출되기 떄문에 Post 사용
-    @CrossOrigin(origins = "*")
     @PostMapping("/login")
     public ResponseEntity<UserVO> login(@RequestBody Map<String, Object> param) {
         ResponseEntity<UserVO> entity = null;
@@ -78,23 +78,27 @@ public class UserController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestBody Map<String, Object> param) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> delete(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
         String email = (String) param.get("email");
 
         // 해당 이메일을 가진 유저가 없으면 FAIL 반환
         UserVO user = userService.findByEmail(email);
         if (user == null) {
-            entity = new ResponseEntity<String>("FAIL", HttpStatus.NOT_FOUND);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.NOT_FOUND);
             return entity;
         }
 
         try {
             userService.deleteUser(email);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
 
         return entity;
@@ -103,7 +107,6 @@ public class UserController {
     @Value("${mail.username}")
     private String mailusername;
     @PostMapping("/mail-authentication")
-    @CrossOrigin(origins = "*")
     @ResponseBody
     public ResponseEntity<JSONObject> mailAuthentication(@RequestBody Map<String, Object> param) throws Exception{
         ResponseEntity<JSONObject> entity = null;
@@ -155,7 +158,6 @@ public class UserController {
 
         UserVO user = userService.findByEmail(email);
         if(user != null) {
-
             obj.put("result", "EXIST");
             entity = new ResponseEntity<JSONObject>(obj, HttpStatus.BAD_REQUEST);
         } else {
@@ -167,17 +169,19 @@ public class UserController {
 
     /*닉네임 중복 확인*/
     @PostMapping("/check-nickname")
-    public ResponseEntity<String> checkNickname(@RequestBody Map<String, Object> param) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> checkNickname(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
         String nickname = (String) param.get("nickname");
 
         UserVO user = userService.findByNickname(nickname);
         if(user != null) {
-            entity = new ResponseEntity<String>("EXIST", HttpStatus.OK);
+            obj.put("result", "EXIST");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.BAD_REQUEST);
         } else {
-            entity = new ResponseEntity<String>("NOT EXIST", HttpStatus.BAD_REQUEST);
+            obj.put("result", "NOT EXIST");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         }
-
         return entity;
     }
 
@@ -198,32 +202,35 @@ public class UserController {
     }
 
     @PostMapping("/edit-nickname")
-    public ResponseEntity<String> editNickname(@RequestBody Map<String, Object> param) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> editNickname(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
         String email = (String) param.get("email");
         String nickname = (String) param.get("nickname");
 
         // 해당 이메일을 가진 유저가 없으면 FAIL 반환
         UserVO user = userService.findByEmail(email);
         if (user == null) {
-            entity = new ResponseEntity<String>("FAIL", HttpStatus.NOT_FOUND);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.NOT_FOUND);
             return entity;
         }
 
         try {
             userService.editNickname(email, nickname);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
         return entity;
     }
 
     @PostMapping("/edit-password")
-    public ResponseEntity<String> editPassword(@RequestBody Map<String, Object> param) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> editPassword(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
         String email = (String) param.get("email");
         String changeencodepwd = pwdEncoder.encode((String) param.get("password"));
 
@@ -232,16 +239,18 @@ public class UserController {
         UserVO user = userService.findByEmail(email);
 
         if (user == null) {
-            entity = new ResponseEntity<String>("FAIL", HttpStatus.NOT_FOUND);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.NOT_FOUND);
             return entity;
         }
 
         try {
             userService.editPassword(email, changeencodepwd);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
         return entity;
@@ -264,7 +273,7 @@ public class UserController {
                 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
                 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
                 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'
-        };	//배열안의 문자 숫자는 원하는대로
+        };   //배열안의 문자 숫자는 원하는대로
 
         StringBuffer password = new StringBuffer();
         Random random = new Random();

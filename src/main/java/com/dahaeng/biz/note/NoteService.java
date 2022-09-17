@@ -13,4 +13,6 @@ public interface NoteService {
 
     List<NoteVO> getNoteList(String email);
 
+    int getNoteId();
+
 }

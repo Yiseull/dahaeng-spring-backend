@@ -1,8 +1,10 @@
 package com.dahaeng.controller;
 
+import com.dahaeng.biz.member.MemberService;
+import com.dahaeng.biz.member.MemberVO;
 import com.dahaeng.biz.note.NoteService;
 import com.dahaeng.biz.note.NoteVO;
-import com.dahaeng.biz.user.UserVO;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,36 +14,56 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/note")
 public class NoteController {
     @Autowired
     private NoteService noteService;
+    @Autowired
+    private MemberService memberService;
 
     @PostMapping("/insert")
-    public ResponseEntity<String> insert(@RequestBody NoteVO vo) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> insert(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        NoteVO noteVO = new NoteVO();
+        MemberVO memberVO = new MemberVO();
+        JSONObject obj = new JSONObject();
+
+        noteVO.setNoteName((String) param.get("noteName"));
+        noteVO.setSetDate((String) param.get("setDate"));
+        noteVO.setNoteDescription((String) param.get("noteDescription"));
+        noteVO.setNoteColor((int)param.get("noteColor"));
 
         try {
-            noteService.insertNote(vo);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            noteService.insertNote(noteVO);
+            int noteId = noteService.getNoteId();
+            System.out.println(noteId);
+            memberVO.setEmail((String) param.get("email"));
+            memberVO.setNoteId(noteId);
+            memberService.insertMember(memberVO);
+            obj.put("result","SUCCESS");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result","FAIL");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.BAD_REQUEST);
         }
-
         return entity;
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> update(@RequestBody NoteVO vo) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> update(@RequestBody NoteVO vo) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
 
         try {
             noteService.updateNote(vo);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result","SUCCESS");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result","FAIL");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
@@ -55,22 +77,25 @@ public class NoteController {
 //    }
 
     @DeleteMapping("/deleteCompletely")
-    public ResponseEntity<String> deleteCompletely(@RequestBody Map<String, Object> param) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> deleteCompletely(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
         int noteId = (int) param.get("noteId");
 
         try {
             noteService.deleteNoteCompletely(noteId);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result","SUCCESS");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result","FAIL");
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.BAD_REQUEST);
         }
 
         return entity;
     }
 
-    @GetMapping("/get")
+    @PostMapping("/get")
     public ResponseEntity<NoteVO> get(@RequestBody Map<String, Object> param) {
         ResponseEntity<NoteVO> entity = null;
         int noteId = (int) param.get("noteId");
@@ -85,7 +110,7 @@ public class NoteController {
         return entity;
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<List<NoteVO>> list(@RequestBody Map<String, Object> param) {
         ResponseEntity<List<NoteVO>> entity = null;
         String email = (String) param.get("email");

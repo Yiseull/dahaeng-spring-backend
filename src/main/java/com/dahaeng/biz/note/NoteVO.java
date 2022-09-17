@@ -1,13 +1,10 @@
 package com.dahaeng.biz.note;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "NOTE")
@@ -17,16 +14,14 @@ public class NoteVO {
     @JsonIgnoreProperties(allowSetters = true)
     private int noteId;
     private String noteName;
+
+    private String setDate;
+
+    private String noteDescription;
+
+    private int noteColor;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime lastUpdate;
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Date startDate;
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Date endDate;
 
     public int getNoteId() {
         return noteId;
@@ -43,6 +38,29 @@ public class NoteVO {
     public void setNoteName(String noteName) {
         this.noteName = noteName;
     }
+    public String getSetDate() {
+        return setDate;
+    }
+
+    public void setSetDate(String setDate) {
+        this.setDate = setDate;
+    }
+
+    public String getNoteDescription() {
+        return noteDescription;
+    }
+
+    public void setNoteDescription(String noteDescription) {
+        this.noteDescription = noteDescription;
+    }
+
+    public int getNoteColor() {
+        return noteColor;
+    }
+
+    public void setNoteColor(int noteColor) {
+        this.noteColor = noteColor;
+    }
 
     public LocalDateTime getLastUpdate() {
         return lastUpdate;
@@ -52,30 +70,15 @@ public class NoteVO {
         this.lastUpdate = lastUpdate;
     }
 
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
-    }
-
     @Override
     public String toString() {
         return "NoteVO{" +
                 "noteId=" + noteId +
                 ", noteName='" + noteName + '\'' +
+                ", setDate='" + setDate + '\'' +
+                ", noteDescription='" + noteDescription + '\'' +
+                ", noteColor=" + noteColor +
                 ", lastUpdate=" + lastUpdate +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
                 '}';
     }
 }

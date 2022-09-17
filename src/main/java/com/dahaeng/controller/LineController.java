@@ -2,6 +2,7 @@ package com.dahaeng.controller;
 
 import com.dahaeng.biz.line.LineService;
 import com.dahaeng.biz.line.LineVO;
+import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,59 +12,70 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/line")
 public class LineController {
     @Autowired
     private LineService lineService;
 
     @PostMapping("/insert")
-    public ResponseEntity<String> insert(@RequestBody LineVO vo) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> insert(@RequestBody LineVO vo) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
 
         try {
             System.out.println("/insert");
             lineService.insertLine(vo);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
 
         return entity;
     }
 
     @PostMapping("/update")
-    public ResponseEntity<String> update(@RequestBody LineVO vo) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> update(@RequestBody LineVO vo) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
 
         try {
             lineService.updateLine(vo);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
 
 
     @DeleteMapping("/delete")
-    public ResponseEntity<String> delete(@RequestBody Map<String, Object> param) {
-        ResponseEntity<String> entity = null;
+    public ResponseEntity<JSONObject> delete(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
+
         int lineId = (int) param.get("lineId");
 
         try {
             lineService.deleteLine(lineId);
-            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
 
         return entity;
     }
 
-    @GetMapping("/get")
+    @PostMapping("/get")
     public ResponseEntity<LineVO> get(@RequestBody Map<String, Object> param) {
         ResponseEntity<LineVO> entity = null;
         int lineId = (int) param.get("lineId");
@@ -78,7 +90,7 @@ public class LineController {
         return entity;
     }
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     public ResponseEntity<List<LineVO>> list(@RequestBody Map<String, Object> param) {
         ResponseEntity<List<LineVO>> entity = null;
         int categoryId = (int) param.get("categoryId");
