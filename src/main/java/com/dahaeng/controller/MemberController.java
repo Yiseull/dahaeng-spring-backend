@@ -33,7 +33,7 @@ public class MemberController {
         return entity;
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<JSONObject> delete(@RequestBody MemberVO vo){
         ResponseEntity<JSONObject> entity = null;
         JSONObject obj = new JSONObject();

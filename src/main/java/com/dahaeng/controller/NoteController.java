@@ -76,7 +76,7 @@ public class NoteController {
 //        return entity;
 //    }
 
-    @DeleteMapping("/deleteCompletely")
+    @PostMapping("/deleteCompletely")
     public ResponseEntity<JSONObject> deleteCompletely(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
         JSONObject obj = new JSONObject();

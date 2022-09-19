@@ -56,7 +56,7 @@ public class CategoryController {
     }
 
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<JSONObject> delete(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
         JSONObject obj = new JSONObject();
@@ -75,7 +75,7 @@ public class CategoryController {
         return entity;
     }
 
-    @GetMapping("/get")
+    @PostMapping("/get")
     public ResponseEntity<CategoryVO> get(@RequestBody Map<String, Object> param) {
         ResponseEntity<CategoryVO> entity = null;
         int categoryId = (int) param.get("categoryId");

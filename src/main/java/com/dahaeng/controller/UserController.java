@@ -77,7 +77,7 @@ public class UserController {
         return entity;
     }
 
-    @DeleteMapping("/delete")
+    @PostMapping("/delete")
     public ResponseEntity<JSONObject> delete(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
         JSONObject obj = new JSONObject();
