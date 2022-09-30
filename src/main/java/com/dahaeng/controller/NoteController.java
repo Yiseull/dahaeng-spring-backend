@@ -1,5 +1,7 @@
 package com.dahaeng.controller;
 
+import com.dahaeng.biz.category.CategoryService;
+import com.dahaeng.biz.category.CategoryVO;
 import com.dahaeng.biz.member.MemberService;
 import com.dahaeng.biz.member.MemberVO;
 import com.dahaeng.biz.note.NoteService;
@@ -21,11 +23,14 @@ public class NoteController {
     private NoteService noteService;
     @Autowired
     private MemberService memberService;
+    @Autowired
+    private CategoryService categoryService;
 
     @PostMapping("/insert")
     public ResponseEntity<JSONObject> insert(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
         NoteVO noteVO = new NoteVO();
+        CategoryVO categoryVO = new CategoryVO();
         MemberVO memberVO = new MemberVO();
         JSONObject obj = new JSONObject();
 
@@ -38,6 +43,9 @@ public class NoteController {
             noteService.insertNote(noteVO);
             int noteId = noteService.getNoteId();
             System.out.println(noteId);
+            categoryVO.setCategoryName("카테고리");
+            categoryVO.setNoteId(noteId);
+            categoryService.insertCategory(categoryVO);
             memberVO.setEmail((String) param.get("email"));
             memberVO.setNoteId(noteId);
             memberService.insertMember(memberVO);
