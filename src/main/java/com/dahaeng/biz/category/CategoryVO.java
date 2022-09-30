@@ -1,17 +1,21 @@
 package com.dahaeng.biz.category;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Entity
 @Table(name = "CATEGORY")
 public class CategoryVO {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int categoryId;
 
     private String categoryName;
 
+    private String contents;
+
     private int noteId;
+
 
     public int getCategoryId() {
         return categoryId;
@@ -29,6 +33,14 @@ public class CategoryVO {
         this.categoryName = categoryName;
     }
 
+    public String getContents() {
+        return contents;
+    }
+
+    public void setContents(String contents) {
+        this.contents = contents;
+    }
+
     public int getNoteId() {
         return noteId;
     }
@@ -42,6 +54,7 @@ public class CategoryVO {
         return "CategoryVO{" +
                 "categoryId=" + categoryId +
                 ", categoryName='" + categoryName + '\'' +
+                ", contents='" + contents + '\'' +
                 ",  noteId=" + noteId +
                 '}';
     }
