@@ -2,12 +2,16 @@ package com.dahaeng.controller;
 
 import com.dahaeng.biz.line.LineService;
 import com.dahaeng.biz.line.LineVO;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +38,46 @@ public class LineController {
             entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
         }
 
+        return entity;
+    }
+
+    @PostMapping("/parseinsert")
+    public ResponseEntity<JSONObject> parseinsert(@RequestBody String param) throws Exception{
+        ResponseEntity<JSONObject> entity = null;
+        JSONParser jsonParser = new JSONParser();
+        JSONObject jsonObj = (JSONObject)jsonParser.parse(param);
+
+        JSONArray jsonArr = (JSONArray) jsonObj.get("cell");
+
+        for(int i=0;i<jsonArr.size();i++){
+            JSONObject jsonObj2 = (JSONObject)jsonArr.get(i);
+            LineVO vo = new LineVO();
+            vo.setText(String.valueOf(jsonObj2.get("text")));
+            vo.setType(String.valueOf(jsonObj2.get("type")));
+            vo.setColor(String.valueOf(jsonObj2.get("color")));
+            vo.setBgcolor(String.valueOf(jsonObj2.get("bgcolor")));
+            vo.setFont(String.valueOf(jsonObj2.get("font")));
+            vo.setCategoryId(Integer.parseInt((String.valueOf(jsonObj2.get("categoryId")))));
+
+            if (jsonObj2.get("lineId")==null){
+                lineService.insertLine(vo);
+            }
+            else{
+                vo.setLineId(Integer.parseInt((String.valueOf(jsonObj2.get("lineId")))));
+                lineService.updateLine(vo);
+            }
+        }
+
+        JSONObject obj = new JSONObject();
+
+        try {
+            obj.put("result", "SUCCESS");
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
+        }
         return entity;
     }
 

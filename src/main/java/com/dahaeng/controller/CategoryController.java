@@ -3,6 +3,7 @@ package com.dahaeng.controller;
 import com.dahaeng.biz.category.CategoryService;
 import com.dahaeng.biz.category.CategoryVO;
 
+import com.dahaeng.biz.line.LineService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ import java.util.Map;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private LineService lineService;
 
     @PostMapping("/insert")
     public ResponseEntity<JSONObject> insert(@RequestBody CategoryVO vo) {
@@ -87,6 +91,26 @@ public class CategoryController {
             entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        return entity;
+    }
+
+    @PostMapping("/getwithcell")
+    public ResponseEntity<JSONObject> getwithcell(@RequestBody Map<String, Object> param){
+        ResponseEntity<JSONObject> entity = null;
+        int categoryId = (int) param.get("categoryId");
+
+        JSONObject newjson = new JSONObject();
+
+        newjson.put("categoryId",categoryService.getCategory(categoryId).getCategoryId());
+        newjson.put("categoryName", categoryService.getCategory(categoryId).getCategoryName());
+        newjson.put("cell",lineService.getLineList(categoryId));
+
+        try {
+            entity = new ResponseEntity<JSONObject>(newjson, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return entity;
     }
 
