@@ -18,4 +18,6 @@ public interface UserService {
     void editNickname(String email, String nickname);
 
     void editPassword(String email, String password);
+
+    List<UserVO> getMemberList(int noteId);
 }

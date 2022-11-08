@@ -1,5 +1,6 @@
 package com.dahaeng.biz.user;
 
+import com.dahaeng.biz.note.NoteVO;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -87,5 +88,10 @@ public class UserDAO {
                 .setParameter(1, changeencodepwd)
                 .setParameter(2, email)
                 .executeUpdate();
+    }
+
+    public List<UserVO> getMemberList(int noteId) {
+        String jpql = "select u from UserVO u where u.email In (select m.email from MemberVO m where m.noteId = "+noteId+")";
+        return entityManager.createQuery(jpql).getResultList();
     }
 }

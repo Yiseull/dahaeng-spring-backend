@@ -1,5 +1,6 @@
 package com.dahaeng.biz.user;
 
+import com.dahaeng.biz.note.NoteVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,5 +58,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void editPassword(String email, String password) {
         userDAO.editPassword(email, password);
+    }
+
+    @Transactional
+    @Override
+    public List<UserVO> getMemberList(int noteId) {
+        return userDAO.getMemberList(noteId);
     }
 }

@@ -1,7 +1,9 @@
 package com.dahaeng.controller;
 
+import com.dahaeng.biz.note.NoteVO;
 import com.dahaeng.biz.user.UserService;
 import com.dahaeng.biz.user.UserVO;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,10 +11,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.mail.internet.MimeMessage;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -55,25 +59,21 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<JSONObject> join(@RequestBody Map<String, Object> param) {
-        ResponseEntity<JSONObject> entity = null;
-
+    public ResponseEntity<String> join(@RequestBody Map<String, Object> param) {
+        ResponseEntity<String> entity = null;
         String encodePwd = pwdEncoder.encode((String) param.get("password"));
-
         System.out.println("암호화: " + encodePwd);
         UserVO vo = new UserVO();
         vo.setEmail((String) param.get("email"));
         vo.setPassword(encodePwd);
         vo.setNickname((String) param.get("nickname"));
-
         try {
             userService.insertUser(vo);
-            entity = new ResponseEntity<>(HttpStatus.OK);
+            entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-
         return entity;
     }
 
@@ -103,6 +103,8 @@ public class UserController {
 
         return entity;
     }
+
+
 
     @Value("${mail.username}")
     private String mailusername;
@@ -218,7 +220,8 @@ public class UserController {
 
         try {
             userService.editNickname(email, nickname);
-            obj.put("result", "SUCCESS");
+            user = userService.findByEmail(email);
+            obj.put("nickname", user.getNickname());
             entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -318,6 +321,29 @@ public class UserController {
             entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
+        return entity;
+    }
+
+    @PostMapping("/memberlist")
+    public ResponseEntity<List<JSONObject>> memberlist(@RequestBody Map<String, Object> param) {
+        ResponseEntity<List<JSONObject>> entity = null;
+        int noteId = (int) param.get("noteId");
+        List<UserVO> getmemberlist = userService.getMemberList(noteId);
+        List<JSONObject> memberlist = new ArrayList<>();
+
+        for(int i=0;i<getmemberlist.size();i++){
+            UserVO vo = getmemberlist.get(i);
+            JSONObject obj = new JSONObject();
+            obj.put("email", vo.getEmail());
+            obj.put("nickname", vo.getNickname());
+            memberlist.add(obj);
+        }
+        try {
+            entity = new ResponseEntity<>(memberlist, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return entity;
     }
 }

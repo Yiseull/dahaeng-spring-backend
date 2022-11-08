@@ -15,7 +15,9 @@ public class NoteVO {
     private int noteId;
     private String noteName;
 
-    private String setDate;
+    private String startDate;
+
+    private String endDate;
 
     private String noteDescription;
 
@@ -38,12 +40,20 @@ public class NoteVO {
     public void setNoteName(String noteName) {
         this.noteName = noteName;
     }
-    public String getSetDate() {
-        return setDate;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setSetDate(String setDate) {
-        this.setDate = setDate;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
     }
 
     public String getNoteDescription() {
@@ -75,7 +85,8 @@ public class NoteVO {
         return "NoteVO{" +
                 "noteId=" + noteId +
                 ", noteName='" + noteName + '\'' +
-                ", setDate='" + setDate + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
                 ", noteDescription='" + noteDescription + '\'' +
                 ", noteColor=" + noteColor +
                 ", lastUpdate=" + lastUpdate +

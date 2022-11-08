@@ -12,10 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+
 @CrossOrigin(origins = "*")
 @RequestMapping("/note")
 public class NoteController {
@@ -35,7 +37,8 @@ public class NoteController {
         JSONObject obj = new JSONObject();
 
         noteVO.setNoteName((String) param.get("noteName"));
-        noteVO.setSetDate((String) param.get("setDate"));
+        noteVO.setStartDate((String) param.get("startDate"));
+        noteVO.setEndDate((String) param.get("endDate"));
         noteVO.setNoteDescription((String) param.get("noteDescription"));
         noteVO.setNoteColor((int)param.get("noteColor"));
 
