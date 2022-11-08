@@ -11,17 +11,20 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Collections;
 
-@Controller
+@RestController
+@CrossOrigin(origins = "*")
 public class GoogleController {
 
     @Autowired
@@ -31,8 +34,8 @@ public class GoogleController {
     private String CLIENT_ID;
 
     @PostMapping("/google")
-    public String googleAuth(@RequestParam("credential") String idtoken, Model model, HttpSession session) throws GeneralSecurityException, IOException {
-        System.out.println("GoogleController2");
+    public ResponseEntity<UserVO> googleAuth(@RequestParam("credential") String idtoken) throws GeneralSecurityException, IOException {
+        ResponseEntity<UserVO> entity = null;
 
         HttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
@@ -65,17 +68,17 @@ public class GoogleController {
             // 등록된 회원이 아니면 닉네임 입력 폼으로 이동
             UserVO user = userService.findByEmail(email);
             if (user == null) {
-                model.addAttribute(("email"), email);
-                return "nicknameForm.jsp";
+                user.setEmail(email);
             }
-            session.setAttribute("user", user);
-
+            entity = new ResponseEntity<>(user, HttpStatus.OK);
         } else {
+            // 유효하지 않은 토큰
             System.out.println("Invalid ID token.");
-            return "/login";
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return entity;
         }
         // 등록된 회원이면
-        return "index.jsp";
+        return entity;
     }
 
     @PostMapping("/googleSignUp")
@@ -86,5 +89,4 @@ public class GoogleController {
         session.setAttribute("user", user);
         return "index.jsp";
     }
-
 }

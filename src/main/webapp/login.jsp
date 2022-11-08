@@ -43,7 +43,7 @@
          data-logo_alignment="left">
     </div>
 
-    <a href="/naverLogin">네이버 로그인 하러 가기 </a>
+    <a href="/getNaverAuth">네이버 로그인 하러 가기 </a>
 
 </body>
 </html>
