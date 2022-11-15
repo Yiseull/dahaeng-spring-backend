@@ -1,5 +1,5 @@
 # dahaeng-spring-backend
-일정 관리 웹 서비스 DA:HAENG(다:행) 의 백엔드 소스코드입니다.
+일정 관리 웹 서비스 DA:HAENG(다:행) 의 백엔드 소스코드입니다. (개발 진행 중)
 
 <br>
 
@@ -11,3 +11,5 @@
 + Spring MVC 5.2.3 RELEASE
 + MySQL 8.0
 + Tomcat 9.0.63
+
+후에 Spring Boot로 리팩토링 할 예정입니다.
