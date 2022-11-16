@@ -69,6 +69,15 @@ public class LineVO {
         this.categoryId = categoryId;
     }
 
+    public void setlineVO(String text, String type, String color,String bgcolor,String font,int categoryId) {
+        this.setText(text);
+        this.setType(type);
+        this.setColor(color);
+        this.setBgcolor(bgcolor);
+        this.setFont(font);
+        this.setCategoryId(categoryId);
+    }
+
     @Override
     public String toString() {
         return "LineVO{" +

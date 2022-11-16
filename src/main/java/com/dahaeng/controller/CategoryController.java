@@ -35,7 +35,7 @@ public class CategoryController {
             System.out.println("/insert");
             categoryService.insertCategory(vo);
             int categoryId = categoryService.getCategoryId();
-            lineVO.setCategoryId(categoryId);
+            lineVO.setlineVO("입력해주세요", "h3", "black", "basicbg","basic",categoryId);
             lineService.insertLine(lineVO);
             obj.put("result", "SUCCESS");
             entity = new ResponseEntity<>(obj, HttpStatus.OK);

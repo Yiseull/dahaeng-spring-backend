@@ -2,7 +2,6 @@ package com.dahaeng.controller;
 
 import com.dahaeng.biz.line.LineService;
 import com.dahaeng.biz.line.LineVO;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,12 +21,14 @@ public class LineController {
     private LineService lineService;
 
     @PostMapping("/insert")
-    public ResponseEntity<JSONObject> insert(@RequestBody LineVO vo) {
+    public ResponseEntity<JSONObject> insert(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
+        int categoryId = (int) param.get("categoryId");
         JSONObject obj = new JSONObject();
+        LineVO vo = new LineVO();
 
         try {
-            System.out.println("/insert");
+            vo.setlineVO("입력해주세요", "h3", "black", "basicbg","basic", categoryId);
             lineService.insertLine(vo);
             obj.put("result", "SUCCESS");
             entity = new ResponseEntity<>(obj, HttpStatus.OK);
@@ -94,6 +94,24 @@ public class LineController {
             e.printStackTrace();
             obj.put("result", "FAIL");
             entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
+        }
+        return entity;
+    }
+
+    @PostMapping("/changetext")
+    public ResponseEntity<LineVO> changetext(@RequestBody Map<String, Object> param){
+        ResponseEntity<LineVO> entity = null;
+        int lineId = (int) param.get("lineId");
+        String text = (String) param.get("text");
+
+        LineVO vo = lineService.getLine(lineId);
+        try {
+            vo.setText(text);
+            lineService.updateLine(vo);
+            entity = new ResponseEntity<>(lineService.getLine(lineId), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return entity;
     }
