@@ -31,11 +31,17 @@ public class NaverController {
 
     //로그인 첫 화면 요청 메소드
     @RequestMapping(value = "/getNaverAuth")
-    public String login(HttpSession session) throws UnsupportedEncodingException {
+    public ResponseEntity<JSONObject> login(HttpSession session) throws UnsupportedEncodingException {
+        ResponseEntity<JSONObject> entity = null;
+
         /* 네이버아이디로 인증 URL을 생성하기 위하여 naverLoginBO클래스의 getAuthorizationUrl메소드 호출 */
         String apiURL = naverLoginBO.getAuthorizationUrl(session);
 
-        return apiURL;
+        JSONObject obj = new JSONObject();
+        obj.put("apiURL", apiURL);
+        entity = new ResponseEntity<>(obj, HttpStatus.OK);
+
+        return entity;
     }
 
 
@@ -59,11 +65,19 @@ public class NaverController {
         // 프로필 조회
         String email = (String) response_obj.get("email");
 
-        // 등록된 회원이 아니면 닉네임 입력 폼으로 이동
-        UserVO user = userService.findByEmail(email);
-        if (user == null) {
-            user.setEmail(email);
+        UserVO user = null;
+        try {
+            user = userService.findByEmail(email);
+
+            // 등록된 회원이 아니면
+            if (user == null) {
+                user.setEmail(email);
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+
         }
+
         entity = new ResponseEntity<>(user, HttpStatus.OK);
         return entity;
     }
