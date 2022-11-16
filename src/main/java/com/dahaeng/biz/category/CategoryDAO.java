@@ -35,4 +35,9 @@ public class CategoryDAO {
         String jpql = "select c from CategoryVO c where c.noteId = "+ noteId;
         return entityManager.createQuery(jpql).getResultList();
     }
+
+    public int getCategoryId() {
+        String jpql = "SELECT max(c.categoryId) FROM CategoryVO c";
+        return (int) entityManager.createQuery(jpql).getSingleResult();
+    }
 }

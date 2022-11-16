@@ -13,4 +13,6 @@ public interface CategoryService {
 
     List<CategoryVO> getCategoryList(int noteId);
 
+    int getCategoryId();
+
 }

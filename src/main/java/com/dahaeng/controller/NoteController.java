@@ -2,6 +2,8 @@ package com.dahaeng.controller;
 
 import com.dahaeng.biz.category.CategoryService;
 import com.dahaeng.biz.category.CategoryVO;
+import com.dahaeng.biz.line.LineService;
+import com.dahaeng.biz.line.LineVO;
 import com.dahaeng.biz.member.MemberService;
 import com.dahaeng.biz.member.MemberVO;
 import com.dahaeng.biz.note.NoteService;
@@ -12,12 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @RestController
-
 @CrossOrigin(origins = "*")
 @RequestMapping("/note")
 public class NoteController {
@@ -27,12 +27,14 @@ public class NoteController {
     private MemberService memberService;
     @Autowired
     private CategoryService categoryService;
-
+    @Autowired
+    private LineService lineService;
     @PostMapping("/insert")
     public ResponseEntity<JSONObject> insert(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
         NoteVO noteVO = new NoteVO();
         CategoryVO categoryVO = new CategoryVO();
+        LineVO lineVO = new LineVO();
         MemberVO memberVO = new MemberVO();
         JSONObject obj = new JSONObject();
 
@@ -49,6 +51,9 @@ public class NoteController {
             categoryVO.setCategoryName("카테고리");
             categoryVO.setNoteId(noteId);
             categoryService.insertCategory(categoryVO);
+            int categoryId = categoryService.getCategoryId();
+            lineVO.setlineVO("입력해주세요", "h3", "black", "basicbg","basic",categoryId);
+            lineService.insertLine(lineVO);
             memberVO.setEmail((String) param.get("email"));
             memberVO.setNoteId(noteId);
             memberService.insertMember(memberVO);
@@ -75,6 +80,24 @@ public class NoteController {
             e.printStackTrace();
             obj.put("result","FAIL");
             entity = new ResponseEntity<JSONObject>(obj, HttpStatus.BAD_REQUEST);
+        }
+        return entity;
+    }
+
+    @PostMapping("/changecolor")
+    public ResponseEntity<NoteVO> changecolor(@RequestBody Map<String, Object> param){
+        ResponseEntity<NoteVO> entity = null;
+        int noteId = (int) param.get("noteId");
+        int noteColor = (int) param.get("noteColor");
+
+        NoteVO vo = noteService.getNote(noteId);
+        try {
+            vo.setNoteColor(noteColor);
+            noteService.updateNote(vo);
+            entity = new ResponseEntity<>(noteService.getNote(noteId), HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            entity = new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return entity;
     }

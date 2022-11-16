@@ -179,7 +179,7 @@ public class UserController {
         UserVO user = userService.findByNickname(nickname);
         if(user != null) {
             obj.put("result", "EXIST");
-            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.BAD_REQUEST);
+            entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         } else {
             obj.put("result", "NOT EXIST");
             entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);

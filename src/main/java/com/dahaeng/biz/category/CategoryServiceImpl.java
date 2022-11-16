@@ -40,4 +40,10 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryVO> getCategoryList(int noteId) {
         return categoryDAO.getCategoryList(noteId);
     }
+
+    @Transactional
+    @Override
+    public int getCategoryId() {
+        return categoryDAO.getCategoryId();
+    }
 }
