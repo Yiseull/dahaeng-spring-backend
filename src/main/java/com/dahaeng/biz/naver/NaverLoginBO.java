@@ -1,103 +1,96 @@
 package com.dahaeng.biz.naver;
 
-import com.github.scribejava.core.builder.ServiceBuilder;
-import com.github.scribejava.core.model.OAuth2AccessToken;
-import com.github.scribejava.core.model.OAuthRequest;
-import com.github.scribejava.core.model.Response;
-import com.github.scribejava.core.model.Verb;
-import com.github.scribejava.core.oauth.OAuth20Service;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.DefaultResponseErrorHandler;
+import org.springframework.web.client.RestTemplate;
 
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.UUID;
 
 @Component
 public class NaverLoginBO {
 
     /* 인증 요청문을 구성하는 파라미터 */
-    //client_id: 애플리케이션 등록 후 발급받은 클라이언트 아이디
-    //response_type: 인증 과정에 대한 구분값. code로 값이 고정돼 있습니다.
-    //redirect_uri: 네이버 로그인 인증의 결과를 전달받을 콜백 URL(URL 인코딩). 애플리케이션을 등록할 때 Callback URL에 설정한 정보입니다.
-    //state: 애플리케이션이 생성한 상태 토큰
     @Value("${naver.client.id}")
     private String CLIENT_ID;
     @Value("${naver.client.secret}")
     private String CLIENT_SECRET;
-    @Value("${naver.redirect.uri}")
-    private String REDIRECT_URI;
-    private final static String SESSION_STATE = "oauth_state";
-    /* 프로필 조회 API URL */
-    private final static String PROFILE_API_URL = "https://openapi.naver.com/v1/nid/me";
 
-    /* 네이버 아이디로 인증  URL 생성  Method */
-    public String getAuthorizationUrl(HttpSession session) {
+    public String getAccessToken(String code, String state) throws IOException {
+        // RestTemplate 인스턴스 생성
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+            @Override
+            public boolean hasError(ClientHttpResponse response) throws IOException {
+                HttpStatus status = response.getStatusCode();
+                return status.series() == HttpStatus.Series.SERVER_ERROR;
+            }
+        });
 
-        /* 세션 유효성 검증을 위하여 난수를 생성 */
-        String state = generateRandomString();
-        /* 생성한 난수 값을 session에 저장 */
-        setSession(session,state);
+        HttpHeaders accessTokenHeaders = new HttpHeaders();
+        accessTokenHeaders.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        /* Scribe에서 제공하는 인증 URL 생성 기능을 이용하여 네아로 인증 URL 생성 */
-        OAuth20Service oauthService = new ServiceBuilder()
-                .apiKey(CLIENT_ID)
-                .apiSecret(CLIENT_SECRET)
-                .callback(REDIRECT_URI)
-                .state(state) //앞서 생성한 난수값을 인증 URL생성시 사용함
-                .build(NaverLoginApi.instance());
+        MultiValueMap<String, String> accessTokenParams = new LinkedMultiValueMap<>();
+        accessTokenParams.add("grant_type", "authorization_code");
+        accessTokenParams.add("client_id", CLIENT_ID);
+        accessTokenParams.add("client_secret", CLIENT_SECRET);
+        accessTokenParams.add("code" , code);	// 응답으로 받은 코드
+        accessTokenParams.add("state" , state); // 응답으로 받은 상태
 
-        return oauthService.getAuthorizationUrl();
-    }
+        HttpEntity<MultiValueMap<String, String>> accessTokenRequest = new HttpEntity<>(accessTokenParams, accessTokenHeaders);
 
-    /* 네이버아이디로 Callback 처리 및  AccessToken 획득 Method */
-    public OAuth2AccessToken getAccessToken(HttpSession session, String code, String state) throws IOException{
+        ResponseEntity<String> accessTokenResponse =  restTemplate.exchange(
+                "https://nid.naver.com/oauth2.0/token",
+                HttpMethod.POST,
+                accessTokenRequest,
+                String.class
+        );
 
-        /* Callback으로 전달받은 세선검증용 난수값과 세션에 저장되어있는 값이 일치하는지 확인 */
-        String sessionState = getSession(session);
-        if(StringUtils.pathEquals(sessionState, state)){
-
-            OAuth20Service oauthService = new ServiceBuilder()
-                    .apiKey(CLIENT_ID)
-                    .apiSecret(CLIENT_SECRET)
-                    .callback(REDIRECT_URI)
-                    .state(state)
-                    .build(NaverLoginApi.instance());
-
-            /* Scribe에서 제공하는 AccessToken 획득 기능으로 네아로 Access Token을 획득 */
-            OAuth2AccessToken accessToken = oauthService.getAccessToken(code);
-            return accessToken;
+        if (accessTokenResponse.getStatusCode() != HttpStatus.OK) {
+            // 오류 처리 해야함
         }
-        return null;
+
+        return accessTokenResponse.getBody();
     }
 
-    /* 세션 유효성 검증을 위한 난수 생성기 */
-    private String generateRandomString() {
-        return UUID.randomUUID().toString();
-    }
-
-    /* http session에 데이터 저장 */
-    private void setSession(HttpSession session,String state){
-        session.setAttribute(SESSION_STATE, state);
-    }
-
-    /* http session에서 데이터 가져오기 */
-    private String getSession(HttpSession session){
-        return (String) session.getAttribute(SESSION_STATE);
-    }
     /* Access Token을 이용하여 네이버 사용자 프로필 API를 호출 */
-    public String getUserProfile(OAuth2AccessToken oauthToken) throws IOException{
+    public String getUserProfile(String accessToken) throws IOException {
+        // RestTemplate 인스턴스 생성
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        restTemplate.setErrorHandler(new DefaultResponseErrorHandler() {
+            @Override
+            public boolean hasError(ClientHttpResponse response) throws IOException {
+                HttpStatus status = response.getStatusCode();
+                return status.series() == HttpStatus.Series.SERVER_ERROR;
+            }
+        });
 
-        OAuth20Service oauthService =new ServiceBuilder()
-                .apiKey(CLIENT_ID)
-                .apiSecret(CLIENT_SECRET)
-                .callback(REDIRECT_URI).build(NaverLoginApi.instance());
+        // header를 생성해서 access token을 넣어줍니다.
+        HttpHeaders profileRequestHeader = new HttpHeaders();
+        profileRequestHeader.add("Authorization", "Bearer " + accessToken);
+        profileRequestHeader.add("Content-type", "application/x-www-form-urlencoded;charset=utf-8");
 
-        OAuthRequest request = new OAuthRequest(Verb.GET, PROFILE_API_URL, oauthService);
-        oauthService.signRequest(oauthToken, request);
-        Response response = request.send();
-        return response.getBody();
+        HttpEntity<HttpHeaders> profileHttpEntity = new HttpEntity<>(profileRequestHeader);
+
+        // profile api로 생성해둔 헤더를 담아서 요청을 보냅니다.
+        ResponseEntity<String> profileResponse = restTemplate.exchange(
+                "https://openapi.naver.com/v1/nid/me",
+                HttpMethod.POST,
+                profileHttpEntity,
+                String.class
+        );
+
+        if (profileResponse.getStatusCode() != HttpStatus.OK) {
+            // 오류 처리 해야함
+        }
+
+        return profileResponse.getBody();
     }
-
 }
