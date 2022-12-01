@@ -22,6 +22,15 @@ public class CategoryDAO {
         entityManager.merge(vo);
     }
 
+    public void editTitle(int categoryId, String categoryName) {
+        String jpql;
+        jpql = "UPDATE CategoryVO c SET c.categoryName=?1 WHERE c.categoryId = ?2";
+        entityManager.createQuery(jpql)
+                .setParameter(1, categoryName)
+                .setParameter(2, categoryId)
+                .executeUpdate();
+    }
+
     public void deleteCategory(int categoryId) {
         entityManager.remove(entityManager.find(CategoryVO.class, categoryId));
     }

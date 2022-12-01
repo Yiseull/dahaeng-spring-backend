@@ -10,7 +10,7 @@ import java.util.List;
 @Service
 public class LineServiceImpl implements LineService {
     @Autowired
-    private com.dahaeng.biz.line.LineDAO lineDAO;
+    private LineDAO lineDAO;
 
     @Transactional
     @Override
@@ -40,5 +40,11 @@ public class LineServiceImpl implements LineService {
     @Override
     public List<LineVO> getLineList(int categoryId) {
         return lineDAO.getLineList(categoryId);
+    }
+
+    @Transactional
+    @Override
+    public void plusindex(int categoryId, int lineindex) {
+        lineDAO.plusindex(categoryId, lineindex);
     }
 }

@@ -29,6 +29,8 @@ public class NoteController {
     private CategoryService categoryService;
     @Autowired
     private LineService lineService;
+
+    //노트 추가하면 자동으로 새로운 카테고리랑 새로운 라인 추가됨
     @PostMapping("/insert")
     public ResponseEntity<JSONObject> insert(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
@@ -42,17 +44,17 @@ public class NoteController {
         noteVO.setStartDate((String) param.get("startDate"));
         noteVO.setEndDate((String) param.get("endDate"));
         noteVO.setNoteDescription((String) param.get("noteDescription"));
-        noteVO.setNoteColor((int)param.get("noteColor"));
+        noteVO.setNoteColor((int)((Math.random()*5)));
 
         try {
             noteService.insertNote(noteVO);
             int noteId = noteService.getNoteId();
             System.out.println(noteId);
-            categoryVO.setCategoryName("카테고리");
+            categoryVO.setCategoryName("카테고리명");
             categoryVO.setNoteId(noteId);
             categoryService.insertCategory(categoryVO);
             int categoryId = categoryService.getCategoryId();
-            lineVO.setlineVO("입력해주세요", "h3", "black", "basicbg","basic",categoryId);
+            lineVO.setlineVO("입력해주세요", "h3", "black", "basicbg","basic",categoryId, 0);
             lineService.insertLine(lineVO);
             memberVO.setEmail((String) param.get("email"));
             memberVO.setNoteId(noteId);
@@ -110,6 +112,9 @@ public class NoteController {
 //        return entity;
 //    }
 
+
+
+    //노트 지우면 해당하는 모든 멤버에서까지 노트가 삭제됨
     @PostMapping("/deleteCompletely")
     public ResponseEntity<JSONObject> deleteCompletely(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;

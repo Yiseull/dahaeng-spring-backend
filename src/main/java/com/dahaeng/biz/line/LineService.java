@@ -13,4 +13,6 @@ public interface LineService {
 
     List<LineVO> getLineList(int categoryId);
 
+    void plusindex(int categoryId, int lineindex);
+
 }

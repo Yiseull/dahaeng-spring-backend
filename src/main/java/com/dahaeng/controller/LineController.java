@@ -20,15 +20,18 @@ public class LineController {
     @Autowired
     private LineService lineService;
 
+    //다음줄 라인에 추가
     @PostMapping("/insert")
     public ResponseEntity<JSONObject> insert(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
         int categoryId = (int) param.get("categoryId");
+        int lineindex = (int) param.get("lineindex");
         JSONObject obj = new JSONObject();
         LineVO vo = new LineVO();
 
         try {
-            vo.setlineVO("입력해주세요", "h3", "black", "basicbg","basic", categoryId);
+            lineService.plusindex(categoryId, lineindex);
+            vo.setlineVO("입력해주세요", "h3", "black", "basicbg","basic", categoryId, lineindex+1);
             lineService.insertLine(vo);
             obj.put("result", "SUCCESS");
             entity = new ResponseEntity<>(obj, HttpStatus.OK);
@@ -41,6 +44,7 @@ public class LineController {
         return entity;
     }
 
+    //cell로 내용 받아서 변경, 추가
     @PostMapping("/parseinsert")
     public ResponseEntity<JSONObject> parseinsert(@RequestBody String param) throws Exception{
         ResponseEntity<JSONObject> entity = null;
@@ -98,6 +102,7 @@ public class LineController {
         return entity;
     }
 
+    //글머리기호 추가할떄 사용
     @PostMapping("/changetext")
     public ResponseEntity<LineVO> changetext(@RequestBody Map<String, Object> param){
         ResponseEntity<LineVO> entity = null;

@@ -7,6 +7,8 @@ public interface CategoryService {
 
     void updateCategory(CategoryVO vo);
 
+    void editTitle(int categoryId, String categoryName);
+
     void deleteCategory(int categoryId);
 
     CategoryVO getCategory(int categoryId);

@@ -25,17 +25,22 @@ public class CategoryController {
     @Autowired
     private LineService lineService;
 
+    //카테고리 추가하면 자동으로 새로운 라인 하나 추가됨
     @PostMapping("/insert")
-    public ResponseEntity<JSONObject> insert(@RequestBody CategoryVO vo) {
+    public ResponseEntity<JSONObject> insert(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
         LineVO lineVO = new LineVO();
         JSONObject obj = new JSONObject();
+        int noteId = (int) param.get("noteId");
+
+        CategoryVO vo = new CategoryVO();
+        vo.setCategoryName("카테고리명");
+        vo.setNoteId(noteId);
 
         try {
-            System.out.println("/insert");
             categoryService.insertCategory(vo);
             int categoryId = categoryService.getCategoryId();
-            lineVO.setlineVO("입력해주세요", "h3", "black", "basicbg","basic",categoryId);
+            lineVO.setlineVO("입력해주세요", "h3", "black", "basicbg","basic",categoryId, 0);
             lineService.insertLine(lineVO);
             obj.put("result", "SUCCESS");
             entity = new ResponseEntity<>(obj, HttpStatus.OK);
@@ -64,6 +69,28 @@ public class CategoryController {
         }
         return entity;
     }
+
+    //카테고리 제목 바꾸기
+    @PostMapping("/edit-title")
+    public ResponseEntity<JSONObject> edittitle(@RequestBody Map<String, Object> param){
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
+        int categoryId = (int) param.get("categoryId");
+        String newtitle = (String) param.get("categoryName");
+
+        try{
+            categoryService.editTitle(categoryId, newtitle);
+            CategoryVO vo = categoryService.getCategory(categoryId);
+            obj.put("categoryName", vo.getCategoryName());
+            entity = new ResponseEntity<>(obj, HttpStatus.OK);
+        } catch (Exception e) {
+            e.printStackTrace();
+            obj.put("result", "FAIL");
+            entity = new ResponseEntity<>(obj, HttpStatus.BAD_REQUEST);
+        }
+        return entity;
+    }
+
 
 
     @PostMapping("/delete")
@@ -100,6 +127,7 @@ public class CategoryController {
         return entity;
     }
 
+    //categoryid에 해당하는 모든 라인을 cell에 담아서 보냄
     @PostMapping("/getwithcell")
     public ResponseEntity<JSONObject> getwithcell(@RequestBody Map<String, Object> param){
         ResponseEntity<JSONObject> entity = null;
@@ -118,6 +146,7 @@ public class CategoryController {
         return entity;
     }
 
+    //noteid 보내면 {카테고리 vo 리스트} 나열(라인 안 나옴)
     @PostMapping("/list")
     public ResponseEntity<List<CategoryVO>> list(@RequestBody Map<String, Object> param) {
         ResponseEntity<List<CategoryVO>> entity = null;
@@ -135,6 +164,8 @@ public class CategoryController {
         return entity;
     }
 
+    //noteid 보내면 전테 카테고리의 내용과 이름 다 불러옴
+    // {noteid:1,document:{{categoryid:1 , cell: {line 리스트}},{categoryid:2, cell: {line리스트}...}...}}
     @PostMapping("/list2")
     public ResponseEntity<JSONObject> list2(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;
@@ -169,6 +200,8 @@ public class CategoryController {
         return entity;
     }
 
+    //noteid보내면 첫번째 카테고리의 내용과 전체 카테고리의 이름 불러옴
+    //{noteid:1, document:{{categoryid:0,cell:{line라스트}},{categroyid, categoryname}...}
     @PostMapping("/list3")
     public ResponseEntity<JSONObject> list3(@RequestBody Map<String, Object> param) {
         ResponseEntity<JSONObject> entity = null;

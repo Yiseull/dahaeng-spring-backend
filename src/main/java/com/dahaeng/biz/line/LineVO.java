@@ -23,6 +23,8 @@ public class LineVO {
 
     private int categoryId;
 
+    private int lineindex;
+
     public int getLineId() {
         return lineId;
     }
@@ -69,13 +71,22 @@ public class LineVO {
         this.categoryId = categoryId;
     }
 
-    public void setlineVO(String text, String type, String color,String bgcolor,String font,int categoryId) {
+    public int getLineindex() {
+        return lineindex;
+    }
+
+    public void setLineindex(int lineindex) {
+        this.lineindex = lineindex;
+    }
+
+    public void setlineVO(String text, String type, String color,String bgcolor,String font,int categoryId,int lineindex) {
         this.setText(text);
         this.setType(type);
         this.setColor(color);
         this.setBgcolor(bgcolor);
         this.setFont(font);
         this.setCategoryId(categoryId);
+        this.setLineindex(lineindex);
     }
 
     @Override
@@ -87,7 +98,8 @@ public class LineVO {
                 ", color='" + color + '\'' +
                 ", bgcolor='" + bgcolor + '\'' +
                 ", font='" + font + '\'' +
-                ",  categoryId=" + categoryId +
+                ",  categoryId=" + categoryId + '\'' +
+                ",  lineindex=" + lineindex +
                 '}';
     }
 }

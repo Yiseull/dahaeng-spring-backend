@@ -25,6 +25,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Transactional
     @Override
+    public void editTitle(int categoryId, String categoryName) {
+        categoryDAO.editTitle(categoryId, categoryName);
+    }
+
+    @Transactional
+    @Override
     public void deleteCategory(int categoryId) {
         categoryDAO.deleteCategory(categoryId);
     }
