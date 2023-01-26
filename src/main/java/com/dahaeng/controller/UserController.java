@@ -1,9 +1,7 @@
 package com.dahaeng.controller;
 
-import com.dahaeng.biz.note.NoteVO;
 import com.dahaeng.biz.user.UserService;
 import com.dahaeng.biz.user.UserVO;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +33,9 @@ public class UserController {
 
     // 로그인은 정보 조회지만 Get을 사용하는 경우 ID, PW 정보가 노출되기 떄문에 Post 사용
     @PostMapping("/login")
-    public ResponseEntity<UserVO> login(@RequestBody Map<String, Object> param) {
-        ResponseEntity<UserVO> entity = null;
+    public ResponseEntity<JSONObject> login(@RequestBody Map<String, Object> param) {
+        ResponseEntity<JSONObject> entity = null;
+        JSONObject obj = new JSONObject();
         UserVO user = null;
         String email = (String) param.get("email");
         String password = (String) param.get("password");
@@ -47,14 +45,16 @@ public class UserController {
         if (user != null) {
             if (pwdEncoder.matches(password ,user.getPassword())) {
                 System.out.println("비밀번호가 일치합니다.");
-                entity = new ResponseEntity<>(user, HttpStatus.OK);
+                obj.put("result", "SUCCESS");
+                obj.put("user", user);
             } else {
                 System.out.println("비밀번호가 불일치합니다.");
-                entity = new ResponseEntity<UserVO>(HttpStatus.BAD_REQUEST);
+                obj.put("result", "PW_FAIL");
             }
         } else {
-            entity = new ResponseEntity<UserVO>(HttpStatus.NOT_FOUND);
+            obj.put("result", "ID_FAIL");
         }
+        entity = new ResponseEntity<JSONObject>(obj, HttpStatus.OK);
         return entity;
     }
 
@@ -67,6 +67,7 @@ public class UserController {
         vo.setEmail((String) param.get("email"));
         vo.setPassword(encodePwd);
         vo.setNickname((String) param.get("nickname"));
+        vo.setUserColor((int)((Math.random()*5)));
         try {
             userService.insertUser(vo);
             entity = new ResponseEntity<String>("SUCCESS", HttpStatus.OK);
@@ -103,8 +104,6 @@ public class UserController {
 
         return entity;
     }
-
-
 
     @Value("${mail.username}")
     private String mailusername;

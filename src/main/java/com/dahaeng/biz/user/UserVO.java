@@ -13,6 +13,7 @@ public class UserVO {
     private String nickname;
     private String id_token;
     private int notificationCheck;
+    private int userColor;
 
     public String getEmail() {
         return email;
@@ -54,6 +55,14 @@ public class UserVO {
         this.notificationCheck = notificationCheck;
     }
 
+    public int getUserColor() {
+        return userColor;
+    }
+
+    public void setUserColor(int userColor) {
+        this.userColor = userColor;
+    }
+
     @Override
     public String toString() {
         return "UserVO{" +
@@ -62,6 +71,7 @@ public class UserVO {
                 ", nickname='" + nickname + '\'' +
                 ", id_token='" + id_token + '\'' +
                 ", notificationCheck=" + notificationCheck +
+                ", userColor=" + userColor +
                 '}';
     }
 }
