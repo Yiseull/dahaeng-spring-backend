@@ -20,7 +20,7 @@ import java.util.Random;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
     @Autowired
     private UserService userService;

@@ -17,7 +17,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/naver")
+@RequestMapping("/api/naver")
 public class NaverController {
 
     @Autowired

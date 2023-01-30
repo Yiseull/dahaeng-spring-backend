@@ -15,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/line")
+@RequestMapping("/api/line")
 public class LineController {
     @Autowired
     private LineService lineService;

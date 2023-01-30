@@ -19,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/note")
+@RequestMapping("/api/note")
 public class NoteController {
     @Autowired
     private NoteService noteService;
