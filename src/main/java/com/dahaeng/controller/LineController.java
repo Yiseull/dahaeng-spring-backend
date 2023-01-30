@@ -110,6 +110,7 @@ public class LineController {
         String text = (String) param.get("text");
 
         LineVO vo = lineService.getLine(lineId);
+
         try {
             vo.setText(text);
             lineService.updateLine(vo);

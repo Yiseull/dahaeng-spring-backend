@@ -60,6 +60,7 @@ public class NaverController {
         System.out.println("email = " + email);
 
         UserVO user = null;
+
         try {
             user = userService.findByEmail(email);
         } catch (Exception e) {

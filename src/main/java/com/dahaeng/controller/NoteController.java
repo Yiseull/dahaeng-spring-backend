@@ -104,16 +104,6 @@ public class NoteController {
         return entity;
     }
 
-
-//    @DeleteMapping("/delete")
-//    public String delete(@RequestBody NoteVO vo){
-//        ResponseEntity<String> entity = null;
-//
-//        return entity;
-//    }
-
-
-
     //노트 지우면 해당하는 모든 멤버에서까지 노트가 삭제됨
     @PostMapping("/deleteCompletely")
     public ResponseEntity<JSONObject> deleteCompletely(@RequestBody Map<String, Object> param) {

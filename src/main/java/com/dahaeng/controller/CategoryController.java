@@ -220,7 +220,6 @@ public class CategoryController {
         newjson.put("cell", lineService.getLineList(ct.getCategoryId()));
         ctwithcell.add(newjson);
 
-
         for (int i=1; i<ctlist.size();i++) {
             CategoryVO ct2 = ctlist.get(i);
 

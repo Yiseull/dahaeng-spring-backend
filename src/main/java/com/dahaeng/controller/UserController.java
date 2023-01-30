@@ -236,7 +236,6 @@ public class UserController {
         String email = (String) param.get("email");
         String changeencodepwd = pwdEncoder.encode((String) param.get("password"));
 
-
         // 해당 이메일을 가진 유저가 없으면 FAIL 반환
         UserVO user = userService.findByEmail(email);
 
