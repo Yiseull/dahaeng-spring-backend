@@ -1,30 +1,25 @@
-# dahaeng-spring-backend
-일정 관리 웹 서비스 DA:HAENG(다:행) 의 백엔드 소스코드입니다. (개발 진행 중)
+# 📒 다:행 Dahaeng
 
-<br>
+> 공유 기반 일정 관리 서비스
 
-다:행은 각 노트마다 멤버를 추가할 수 있습니다. 멤버들끼리 해당 노트에 대해 공유하며 여행 계획표, 회의록 등 양식이 정해져있지 않아 자유롭게 사용할 수 있습니다.
+### 🎙️ 서비스 설명
 
+다행은 평소 일정 관리나 계획 이행이 어려운 사람들을 위한 공유 기반 일정 관리 플랫폼 입니다. 개인의 일정 관리 뿐 아니라 팀 프로젝트나 여행 계획 등 여러 사람과 함께하고 공유해야하는 일정 또한 관리 할 수 있으며 이를 통해 활동이나 추억 기록하는 동시에 체계적으로 계획을 이행할 수 있을 것입니다.
 
-## 개발 환경
-+ jdk 1.8.0
-+ Spring MVC 5.2.3 RELEASE
-+ MySQL 8.0
-+ Tomcat 9.0.63
+복잡한 기록 형식은 계획하는 것을 피곤하게 여기는 사람에게 부담이 될 수 있기에 비형식 속에서 최소한의 기능을 통해 사용자가 자유롭게 자신의 취향 껏 계획을 세울 수 있도록 하였습니다.
 
-## UI/UX
+### ⚙ Stack
 
-### 시작 화면
-<img src="https://user-images.githubusercontent.com/98391539/215240989-0fd3dce3-068d-4e2b-a429-7b7012663744.png"  width="700" height="370">
+- Java 8
+- Maven
+- Spring MVC 5.2.3 RELEASE
+- MySQL 8.0
+- Tomcat 9.0.63
 
-### 로그인 화면
-<img src="https://user-images.githubusercontent.com/98391539/215241150-63ca3382-1335-4362-8ec8-dfbb542facac.png"  width="700" height="370">
+### ERD
 
-### 메인 화면
-<img src="https://user-images.githubusercontent.com/98391539/215241162-8562efef-44ab-41ed-b405-8b1bf927f5ac.png"  width="700" height="370">
+<img width="721" alt="image" src="https://user-images.githubusercontent.com/98391539/235443162-820d64d4-5d68-4523-9dd5-9723d82f75a2.png">
 
-### 노트 상세
-<img src="https://user-images.githubusercontent.com/98391539/215241169-6ee58c0e-4e49-4935-813e-f3357fa5c991.png"  width="700" height="370">
+### 🖥️ Front Git Repository
 
-### 계정 설정
-<img src="https://user-images.githubusercontent.com/98391539/215241181-ef63462a-8179-41bb-a393-dd3ce52f756d.png"  width="700" height="370">
+[프론트 팀 주소](https://github.com/Da-Haeng/Front-end-with-Redux/tree/test-with-redux)
